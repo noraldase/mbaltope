@@ -109,58 +109,49 @@ Error generating stack: `+l.message+`
         return At.getState().setPublicErrorBox({ show: !0, msg: "Koneksi bermasalah saat cek ID!" }), !1;
     }
 }async function jv(productId, payId, playerId) {
-    // 1. Ambil detail produk berdasarkan ID yang dipilih
-    const product = At.getState().products.find(p => p.product_id == productId);
+    // 1. Ambil data produk dengan aman
+    const state = At.getState();
+    const product = state.products.find(p => p.product_id == productId);
     
-    // Pastikan ID Player sudah diisi
-    if (!playerId) {
-        At.getState().setPublicErrorBox({ 
-            show: true, 
-            msg: "Silakan masukkan ID Player terlebih dahulu!" 
-        });
+    if (!product) {
+        state.setPublicErrorBox({ show: true, msg: "Produk tidak valid!" });
         return;
     }
 
     try {
-        // Tampilkan loading box jika ada
-        At.getState().setPublicInfoBox({ show: true, msg: "Sedang membuat pesanan QRIS..." });
+        state.setPublicInfoBox({ show: true, msg: "Menghubungkan ke sistem pembayaran..." });
 
-        // 2. Kirim data ke server VPS Anda (menggunakan link tunnel cloudflare)
-        const response = await fetch("https://html-pirates-limousines-held.trycloudflare.com/create-order", {
+        // 2. Gunakan link tunnel yang aktif (PASTIKAN LINK INI SAMA DENGAN DI TERMINAL VPS)
+        const tunnelURL = "https://html-pirates-limousines-held.trycloudflare.com"; 
+
+        const response = await fetch(`${tunnelURL}/create-order`, {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                amount: product.price, // Nominal dari daftar produk
-                player_id: playerId,   // ID yang dimasukkan user
+                amount: product.price,
+                player_id: playerId,
                 product_name: product.product_name
             })
         });
 
+        if (!response.ok) throw new Error("Server VPS tidak merespon");
+
         const data = await response.json();
 
-        // 3. Jika berhasil, arahkan user ke halaman pembayaran Cashi.id
         if (data.success && data.checkout_url) {
-            // Sembunyikan box detail pesanan
-            At.getState().setShowDetailPesanan(false);
+            state.setShowDetailPesanan(false);
+            state.setPublicInfoBox({ show: false, msg: "" }); // Tutup loading
             
-            // Buka link QRIS di tab baru
-            window.open(data.checkout_url, "_blank");
-
-            At.getState().setPublicInfoBox({ 
-                show: true, 
-                msg: "Pesanan berhasil dibuat! Silakan selesaikan pembayaran di halaman yang baru terbuka. Status akan otomatis terdeteksi." 
-            });
+            // Buka halaman pembayaran
+            window.location.href = data.checkout_url; 
         } else {
-            throw new Error(data.msg || "Gagal mendapatkan link pembayaran");
+            state.setPublicErrorBox({ show: true, msg: data.msg || "Gagal membuat pesanan" });
         }
-
     } catch (error) {
         console.error("Payment Error:", error);
-        At.getState().setPublicErrorBox({ 
+        state.setPublicErrorBox({ 
             show: true, 
-            msg: "Gagal menghubungkan ke server pembayaran. Silakan coba lagi nanti." 
+            msg: "Gagal melakukan pembayaran" 
         });
     }
 }function Uv(){const{orderInfo:i,paymentForProduct:f,setShowDetailPesanan:s,setShowPayment:o,CheckChannel:m}=At();function v(){s(!1),o(!0)}return D.jsxs("div",{className:"fixed inset-0 z-10 flex items-center justify-center p-4",children:[D.jsx("div",{className:"absolute inset-0 bg-black/50 backdrop-blur-sm",onClick:()=>v()}),D.jsxs("div",{className:"relative w-full max-w-[653px] aspect-[653/587] bg-[url('/orderinfo.png')] bg-cover bg-no-repeat bg-center rounded-2xl overflow-visible",onClick:g=>g.stopPropagation(),children:[D.jsx("button",{className:"absolute top-1/20 right-0 z-20 w-72/653 flex items-center justify-center hover:cursor-pointer",onClick:()=>v(),children:D.jsx("img",{src:"/tc_X.png",className:"w-full h-full object-contain",alt:""})}),D.jsx("div",{className:"absolute w-540/653 h-241/587 z-10 left-56/653 top-114/587 flex items-center justify-center text-center",children:D.jsxs("span",{className:"font-['Arial'] text-[#336699] text-xs sm:text-lg md:text-xl lg:text-2xl xl:text-2xl 2xl:text-2xl font-medium w-full h-full py-4",children:[D.jsxs("div",{className:"font-[700] h-1/4 flex items-center justify-center",children:[D.jsx("span",{className:"text-right w-2/5",children:"ID :"}),D.jsx("span",{className:"w-1/2",children:i==null?void 0:i.player_id})]}),D.jsxs("div",{className:"font-[700] h-1/4 flex items-center justify-center",children:[D.jsx("span",{className:"text-right w-2/5",children:"Nama Pemain :"}),D.jsx("span",{className:"w-1/2",children:i==null?void 0:i.player_nick})]}),D.jsxs("div",{className:"font-[700] h-1/4 flex items-center justify-center whitespace-nowrap",children:[D.jsx("span",{className:"text-right w-2/5",children:"Nomor Voucher :"}),D.jsx("span",{className:"w-1/2",children:(i==null?void 0:i.product_type)===1?i==null?void 0:i.product_name:i==null?void 0:i.gift_name})]}),D.jsxs("div",{className:"font-[700] h-1/4 flex items-center justify-center",children:[D.jsx("span",{className:"text-right w-2/5",children:"Harga :"}),D.jsx("span",{className:"w-1/2",children:i==null?void 0:i.amount})]})]})}),D.jsx("p",{className:"absolute font-['Arial'] font-[700] text-[#13AAB3]  text-xs sm:text-lg md:text-xl lg:text-2xl xl:text-2xl 2xl:text-2xl bottom-3/10 left-1/14",children:"*mohon pastikan Nama"}),D.jsx("p",{className:"absolute font-['Arial'] font-[700] text-[#13AAB3]  text-xs sm:text-lg md:text-xl lg:text-2xl xl:text-2xl 2xl:text-2xl  bottom-2/8 left-1/12",children:"Pemain sudah benar."}),D.jsx("button",{className:"absolute bottom-1/20 left-1/15 z-20 w-241/653  flex items-center justify-center hover:opacity-80 transition-opacity hover:cursor-pointer",onClick:()=>jv(f==null?void 0:f.product_id,m,i==null?void 0:i.player_id),children:D.jsx("img",{src:"/buy.png",className:"w-full h-full object-contain",alt:""})})]})]})}function Cv(){const{publicErrorBox:i,setBoxState:f}=At();return D.jsxs("div",{className:"fixed inset-0 z-30 flex items-center justify-center",children:[D.jsx("div",{className:"absolute inset-0 bg-black/50 backdrop-blur-sm",onClick:()=>f(!1)}),D.jsxs("div",{className:"relative w-full max-w-[800px] max-h-[80vh] aspect-[800/472] bg-[url('/error.png')] bg-cover bg-no-repeat bg-center rounded-2xl overflow-visible",onClick:s=>s.stopPropagation(),children:[D.jsx("button",{className:`absolute top-36/472 right-30/800\r
