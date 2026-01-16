@@ -61,9 +61,10 @@ Error generating stack: `+l.message+`
     try {
         // Data yang kita masukkan sendiri (Bukan dari API luar)
         var customList = [
-            { product_id: "1", product_name: "1.000.000.000 Koin", price: 65000, rewards: [{prop_num: 30000000}, {prop_num: 3000000}], product_type: 1 },
-            { product_id: "2", product_name: "2.000.000.000 Koin", price: 125000, rewards: [{prop_num: 60000000}, {prop_num: 6000000}], product_type: 1 },
-            { product_id: "3", product_name: "5.000.000.000 Koin", price: 315000, rewards: [{prop_num: 200000000}, {prop_num: 20000000}], product_type: 1 },
+            { product_id: "1", product_name: "1.000.000.000 Koin", price: 65000, rewards: [{prop_num: 1000000000}, {prop_num: 1000000000}], product_type: 1 },
+            { product_id: "2", product_name: "2.000.000.000 Koin", price: 130000, rewards: [{prop_num: 2000000000}, {prop_num: 2000000000}], product_type: 1 },
+            { product_id: "3", product_name: "5.000.000.000 Koin", price: 305000, rewards: [{prop_num: 5000000000}, {prop_num: 5000000000}], product_type: 1 },
+			{ product_id: "4", product_name: "10.000.000.000 Koin", price: 625000, rewards: [{prop_num: 10000000000}, {prop_num: 10000000000}], product_type: 1 },
             { product_id: "7", product_name: "Paket VIP 1", price: 10000, rewards: [{prop_num: 1}], product_type: 2 }
         ];
         
