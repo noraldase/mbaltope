@@ -111,7 +111,7 @@ Error generating stack: `+l.message+`
 }async function jv(productId, payId, playerId) {
     const state = At.getState();
     const product = state.products.find(p => p.product_id == productId);
-    const tunnelURL = "https://html-pirates-limousines-held.trycloudflare.com "; // UPDATE SESUAI TERMINAL
+    const tunnelURL = "https://rural-savings-waiting-representation.trycloudflare.com/"; // UPDATE SESUAI TERMINAL
 
     try {
         state.setPublicInfoBox({ show: true, msg: "Sedang membuat QRIS..." });
