@@ -123,7 +123,7 @@ Error generating stack: `+l.message+`
     }
 
     // 1. Buka Halaman Pembayaran Pakasir
-    const payUrl = `https://app.pakasir.com/pay/${slug}/${amount}?order_id=${order_id}&qris_only=1`;
+    const payUrl = `https://app.pakasir.com/pay/${slug}/${amount}?order_id=${order_id}&qris_only=1&redirect=https://topup.neoparty.web.id/success.html`;
     window.open(payUrl, "_blank");
 
     // 2. Tampilkan Info Box
