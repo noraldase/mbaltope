@@ -167,11 +167,14 @@ Error generating stack: `+l.message+`
             D.jsx("a", {
                 href: "https://www.neoparty.web.id", // Ganti dengan link tujuan
                 target: "_blank",
-                className: "w-full mb-4 py-3 bg-gradient-to-r from-yellow-400 via-orange-500 to-yellow-400 text-white font-black rounded-2xl text-center shadow-[0_0_15px_rgba(253,113,0,0.6)] hover:scale-105 transition-transform animate-pulse text-lg border-2 border-white",
+				className: "w-full mb-4 py-3 bg-[#FFD700] text-[#064B7F] font-black rounded-2xl text-center shadow-xl block z-20 border-2 border-[#FD7100]",
                 style: { 
-                    zIndex: 10, 
-                    textShadow: "2px 2px 4px rgba(0,0,0,0.5)",
-                    letterSpacing: "1px"
+                    opacity: "1",           // Memastikan tidak transparan
+                    backgroundColor: "#FFD700", // Warna cadangan kuning pekat
+                    color: "#064B7F",       // Warna teks biru tua agar kontras
+                    fontSize: "18px",
+                    fontWeight: "900",
+                    textDecoration: "none"
                 },
                 children: "BONGKAR KLIK DISINI"
             }),
