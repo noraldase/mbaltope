@@ -110,61 +110,56 @@ Error generating stack: `+l.message+`
     }
 }async function jv(productId, payId, playerId) {
   const state = At.getState();
-  const product = state.products.find(p => p.current_product_id == productId || p.product_id == productId);
+  const product = state.products.find(p => p.product_id == productId);
+  // UPDATE INI DENGAN LINK TUNNEL TERBARU ANDA
   const API = "https://rural-savings-waiting-representation.trycloudflare.com";
 
-  if (!product) return;
+  if (!product || !playerId) {
+    state.setPublicErrorBox({ show: true, msg: "ID Player wajib diisi!" });
+    return;
+  }
 
   try {
-    // 1. Tampilkan status loading
     state.setPublicInfoBox({ show: true, msg: "Sedang membuat QRIS..." });
 
     const res = await fetch(`${API}/generate-qris`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        product_id: product.product_id,
-        player_id: playerId
-      })
+      body: JSON.stringify({ product_id: product.product_id, player_id: playerId })
     });
 
     const data = await res.json();
     if (!data.success) throw new Error();
 
-    // 2. SEMBUNYIKAN DETAIL PESANAN AGAR TIDAK TUMPANG TINDIH (SANGAT PENTING)
-    state.setShowDetailPesanan(false); 
+    // 1. Buka Gambar QRIS di Tab Baru agar bisa di-scan/download oleh user
+    const newWindow = window.open();
+    newWindow.document.write(`<title>Scan QRIS NeoParty</title><body style='margin:0;display:flex;justify-content:center;align-items:center;background:#000;'><img src='${data.qris_image}' style='max-width:100%;'></body>`);
 
-    // 3. TAMPILKAN QRIS LANGSUNG KE DALAM BOX INFORMASI
+    // 2. Tampilkan instruksi teks biasa di website (Tanpa HTML tag)
     state.setPublicInfoBox({
       show: true,
-      msg: `
-        <div style="display:flex; flex-direction:column; align-items:center; color:#1E628D;">
-          <p style="font-weight:bold; margin-bottom:5px;">PEMBAYARAN QRIS</p>
-          <img src="${data.qris_image}" style="width:200px; border:4px solid white; border-radius:10px; background:white;" />
-          <p style="font-size:20px; font-weight:900; color:#FD7100; margin-top:10px;">Rp ${data.amount.toLocaleString()}</p>
-          <p style="font-size:11px; margin-top:5px; text-align:center;">Silakan scan & bayar.<br/>Klik 'Tentukan' jika sudah selesai.</p>
-        </div>
-      `
+      msg: `QRIS TELAH DIBUKA DI TAB BARU.\n\n` +
+           `Total Bayar: Rp ${data.amount.toLocaleString()}\n\n` +
+           `Silakan bayar dan klik 'Tentukan' untuk konfirmasi.`
     });
 
-    // 4. LOGIKA TOMBOL 'TENTUKAN' UNTUK KONFIRMASI KE TELEGRAM
-    const originalSetInfoBoxState = state.setInfoBoxState;
+    // 3. Logika Konfirmasi ke Telegram saat klik tombol 'Tentukan' (OK)
+    const originalClose = state.setInfoBoxState;
     state.setInfoBoxState = async (val) => {
-      if (val === false) { // Saat user klik tombol 'Tentukan'
+      if (val === false) { // Saat user klik tombol kuning
         await fetch(`${API}/konfirmasi`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ order_id: data.order_id })
         });
-        alert("Terima kasih! Admin akan segera mengecek mutasi dan mengirim koin.");
+        alert("Terima kasih! Pembayaran sedang diproses");
       }
-      originalSetInfoBoxState(val);
-      state.setInfoBoxState = originalSetInfoBoxState; // Kembalikan ke fungsi asli
+      originalClose(val);
+      state.setInfoBoxState = originalClose; // Reset ke fungsi asli
     };
 
   } catch (e) {
-    console.error(e);
-    state.setPublicErrorBox({ show: true, msg: "Gagal membuat QRIS. Cek koneksi VPS!" });
+    state.setPublicErrorBox({ show: true, msg: "Gagal! Ulangi" });
   }
 }
 function Uv(){const{orderInfo:i,paymentForProduct:f,setShowDetailPesanan:s,setShowPayment:o,CheckChannel:m}=At();function v(){s(!1),o(!0)}return D.jsxs("div",{className:"fixed inset-0 z-10 flex items-center justify-center p-4",children:[D.jsx("div",{className:"absolute inset-0 bg-black/50 backdrop-blur-sm",onClick:()=>v()}),D.jsxs("div",{className:"relative w-full max-w-[653px] aspect-[653/587] bg-[url('/orderinfo.png')] bg-cover bg-no-repeat bg-center rounded-2xl overflow-visible",onClick:g=>g.stopPropagation(),children:[D.jsx("button",{className:"absolute top-1/20 right-0 z-20 w-72/653 flex items-center justify-center hover:cursor-pointer",onClick:()=>v(),children:D.jsx("img",{src:"/tc_X.png",className:"w-full h-full object-contain",alt:""})}),D.jsx("div",{className:"absolute w-540/653 h-241/587 z-10 left-56/653 top-114/587 flex items-center justify-center text-center",children:D.jsxs("span",{className:"font-['Arial'] text-[#336699] text-xs sm:text-lg md:text-xl lg:text-2xl xl:text-2xl 2xl:text-2xl font-medium w-full h-full py-4",children:[D.jsxs("div",{className:"font-[700] h-1/4 flex items-center justify-center",children:[D.jsx("span",{className:"text-right w-2/5",children:"ID :"}),D.jsx("span",{className:"w-1/2",children:i==null?void 0:i.player_id})]}),D.jsxs("div",{className:"font-[700] h-1/4 flex items-center justify-center",children:[D.jsx("span",{className:"text-right w-2/5",children:"Nama Pemain :"}),D.jsx("span",{className:"w-1/2",children:i==null?void 0:i.player_nick})]}),D.jsxs("div",{className:"font-[700] h-1/4 flex items-center justify-center whitespace-nowrap",children:[D.jsx("span",{className:"text-right w-2/5",children:"Nomor Voucher :"}),D.jsx("span",{className:"w-1/2",children:(i==null?void 0:i.product_type)===1?i==null?void 0:i.product_name:i==null?void 0:i.gift_name})]}),D.jsxs("div",{className:"font-[700] h-1/4 flex items-center justify-center",children:[D.jsx("span",{className:"text-right w-2/5",children:"Harga :"}),D.jsx("span",{className:"w-1/2",children:i==null?void 0:i.amount})]})]})}),D.jsx("p",{className:"absolute font-['Arial'] font-[700] text-[#13AAB3]  text-xs sm:text-lg md:text-xl lg:text-2xl xl:text-2xl 2xl:text-2xl bottom-3/10 left-1/14",children:"*mohon pastikan Nama"}),D.jsx("p",{className:"absolute font-['Arial'] font-[700] text-[#13AAB3]  text-xs sm:text-lg md:text-xl lg:text-2xl xl:text-2xl 2xl:text-2xl  bottom-2/8 left-1/12",children:"Pemain sudah benar."}),D.jsx("button",{className:"absolute bottom-1/20 left-1/15 z-20 w-241/653  flex items-center justify-center hover:opacity-80 transition-opacity hover:cursor-pointer",onClick:()=>jv(f==null?void 0:f.product_id,m,i==null?void 0:i.player_id),children:D.jsx("img",{src:"/buy.png",className:"w-full h-full object-contain",alt:""})})]})]})}function Cv(){const{publicErrorBox:i,setBoxState:f}=At();return D.jsxs("div",{className:"fixed inset-0 z-30 flex items-center justify-center",children:[D.jsx("div",{className:"absolute inset-0 bg-black/50 backdrop-blur-sm",onClick:()=>f(!1)}),D.jsxs("div",{className:"relative w-full max-w-[800px] max-h-[80vh] aspect-[800/472] bg-[url('/error.png')] bg-cover bg-no-repeat bg-center rounded-2xl overflow-visible",onClick:s=>s.stopPropagation(),children:[D.jsx("button",{className:`absolute top-36/472 right-30/800\r
