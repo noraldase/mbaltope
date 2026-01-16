@@ -116,6 +116,7 @@ Error generating stack: `+l.message+`
   if (!product) return;
 
   try {
+    // 1. TAMPILKAN LOADING
     state.setPublicInfoBox({
       show: true,
       msg: "Membuat QRIS..."
@@ -133,18 +134,23 @@ Error generating stack: `+l.message+`
     const data = await res.json();
     if (!data.success) throw new Error();
 
-    // ⬇️ SIMPAN KE PAYMENT STATE (INI KUNCI)
+    // 2. TUTUP INFO BOX (INI YANG SELAMA INI HILANG)
+    state.setPublicInfoBox({ show: false });
+
+    // 3. SET PAYMENT DATA
     state.setPaymentForProduct({
       ...product,
-      qris_image: data.qris_image,
+      icon: data.qris_image,   // pakai field yang DIRender UI
       order_id: data.order_id,
       amount: data.amount
     });
 
-    // ⬇️ TAMPILKAN PAYMENT UI
+    // 4. TAMPILKAN PAYMENT UI
     state.setShowPayment(true);
 
-  } catch {
+  } catch (e) {
+    console.error(e);
+    state.setPublicInfoBox({ show: false });
     state.setPublicErrorBox({
       show: true,
       msg: "Gagal membuat QRIS"
