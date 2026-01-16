@@ -132,9 +132,43 @@ Error generating stack: `+l.message+`
     if (!data.success) throw new Error();
 
     // 1. Buka Gambar QRIS di Tab Baru agar bisa di-scan/download oleh user
-    const newWindow = window.open();
-    newWindow.document.write(`<title>Scan QRIS NeoParty</title><body style='margin:0;display:flex;justify-content:center;align-items:center;background:#000;'><img src='${data.qris_image}' style='max-width:100%;'></body>`);
-
+    const newWindow = window.open("", "_blank");
+newWindow.document.write(`
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Scan QRIS NeoParty</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+<body style="
+  margin:0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:#f2f2f2;
+  height:100vh;
+">
+  <div style="
+    background:white;
+    padding:20px;
+    border-radius:16px;
+  ">
+    <img 
+      src="${data.qris_image}" 
+      style="
+        width:260px;
+        height:260px;
+        image-rendering:pixelated;
+      "
+    />
+    <p style="text-align:center;font-weight:bold;margin-top:10px;">
+      Rp ${data.amount.toLocaleString()}
+    </p>
+  </div>
+</body>
+</html>
+`);
+newWindow.document.close();
     // 2. Tampilkan instruksi teks biasa di website (Tanpa HTML tag)
     state.setPublicInfoBox({
       show: true,
