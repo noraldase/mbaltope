@@ -57,6 +57,23 @@
                 }, 500);
             }
         }, 1000);
+
+        const params = new URLSearchParams(window.location.search);
+    const data = {
+        playerId: params.get("id"),
+        productName: params.get("name"),
+        amount: params.get("pay")
+    };
+
+    if (data.playerId) {
+        fetch("https://api.neoparty.web.id/notify-only", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+        })
+        .then(() => console.log("Behasil"))
+        .catch(err => console.error("Gagal"));
+    }
     </script>
 </body>
 </html>
