@@ -77,38 +77,65 @@ Error generating stack: `+l.message+`
         console.log("Error loading products");
     }
 }async function Mv(i, f) {
-    if (i === void 0 || f === void 0) return At.getState().setPublicErrorBox({ show: !0, msg: "Gagal membaca informasi!" }), !1;
-    
-    // Signature asli untuk akses API
-    const s = `player_id=${f}&product_id=${i}&signature=${At.getState().signature}`, o = $0(s);
-    
+    if (i === void 0 || f === void 0) return At.getState().setPublicErrorBox({
+        show: !0,
+        msg: "Gagal membaca informasi!"
+    }), !1;
+
+    // --- PERBAIKAN KHUSUS ID 8 & 9 ---
+    // Karena ID 8 dan 9 adalah item custom, server akan menolak jika dikirim langsung.
+    // Kita gunakan "1" sebagai 'ID Pancingan' agar server mau memberikan Nama Pemain.
+    const dummyId = "1"; 
+
+    // Kita menyusun signature menggunakan dummyId agar valid di mata server
+    const s = `player_id=${f}&product_id=${dummyId}&signature=${At.getState().signature}`,
+        o = $0(s);
+
     try {
-        // Tetap tembak ke server asli untuk ambil Nickname
+        // Request ke server tetap menggunakan dummyId
         const m = await Ji("/agent_recharge/order/info", {
             baseURL: "https://idn-ack.neopartyworld.com",
-            headers: { Signature: o },
-            query: { player_id: f, product_id: i }
+            headers: {
+                Signature: o
+            },
+            query: {
+                player_id: f,
+                product_id: dummyId 
+            }
         });
 
         if (m.En === 0) {
-            // Ambil data produk custom kita dari state
-            const selectedProduct = At.getState().products.find(p => p.product_id == i);
+            // Server berhasil merespon (karena kita pakai ID 1)
             
-            // Gabungkan Nickname asli dengan Harga/Token baru
+            // Sekarang kita cari data produk ASLI yang diklik pengguna (ID 8 atau 9)
+            // Data ini diambil dari daftar produk lokal (Dv), bukan dari server
+            const selectedProduct = At.getState().products.find(p => p.product_id == i);
+
             const updatedOrderInfo = {
                 ...m.Data,
-                player_nick: m.Data.player_nick, // INI NAMA ASLINYA
+                player_nick: m.Data.player_nick, // Nama player diambil dari server
+                
+                // Ganti Nama Produk & Harga dengan data ID 8/9 yang sebenarnya
                 product_name: selectedProduct ? selectedProduct.product_name : m.Data.product_name,
-                amount: selectedProduct ? selectedProduct.price : m.Data.amount
+                amount: selectedProduct ? selectedProduct.price : m.Data.amount,
+                
+                // Pastikan tipe produk (Koin/VIP) sesuai, agar tampilannya benar
+                product_type: selectedProduct ? selectedProduct.product_type : 1
             };
 
             At.getState().setOrderInfo(updatedOrderInfo);
             return !0;
         } else {
-            return At.getState().setPublicErrorBox({ show: !0, msg: m.En === 656 ? "ID Pengguna tidak ditemukan!" : "Gagal memulai pembayaran!" }), !1;
+            return At.getState().setPublicErrorBox({
+                show: !0,
+                msg: m.En === 656 ? "ID Pengguna tidak ditemukan!" : "Gagal memulai pembayaran!"
+            }), !1;
         }
     } catch {
-        return At.getState().setPublicErrorBox({ show: !0, msg: "Koneksi bermasalah saat cek ID!" }), !1;
+        return At.getState().setPublicErrorBox({
+            show: !0,
+            msg: "Koneksi bermasalah saat cek ID!"
+        }), !1;
     }
 }async function jv(productId, payId, playerId) {
     const state = At.getState();
