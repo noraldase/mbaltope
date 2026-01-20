@@ -61,15 +61,12 @@ Error generating stack: `+l.message+`
     try {
         // Data yang kita masukkan sendiri (Bukan dari API luar)
         var customList = [
-            { product_id: "1", product_name: "120.000.000 Koin", price: 10000, rewards: [{prop_num: 120000000}], product_type: 1 },
-            { product_id: "2", product_name: "170.000.000 Koin", price: 15000, rewards: [{prop_num: 170000000}], product_type: 1 },
-            { product_id: "3", product_name: "250.000.000 Koin", price: 20000, rewards: [{prop_num: 250000000}], product_type: 1 },
-            { product_id: "4", product_name: "350.000.000 Koin", price: 25000, rewards: [{prop_num: 350000000}], product_type: 1 },
-            { product_id: "5", product_name: "500.000.000 Koin", price: 32500, rewards: [{prop_num: 500000000}], product_type: 1 },
-			{ product_id: "6", product_name: "1.000.000.000 Koin", price: 65000, rewards: [{prop_num: 1000000000}], product_type: 1 },
-            { product_id: "7", product_name: "3.000.000.000 Koin", price: 195000, rewards: [{prop_num: 3000000000}], product_type: 1 },
-			{ product_id: "8", product_name: "5.000.000.000 Koin", price: 325000, rewards: [{prop_num: 5000000000}], product_type: 1 },
-            { product_id: "9", product_name: "Paket VIP 1", price: 10000, rewards: [{prop_num: 1}], product_type: 2 }
+            { product_id: "1", product_name: "1.000.000.000 Koin", price: 65000, rewards: [{prop_num: 1000000000}], product_type: 1 },
+            { product_id: "2", product_name: "2.000.000.000 Koin", price: 130000, rewards: [{prop_num: 2000000000}], product_type: 1 },
+			{ product_id: "3", product_name: "3.000.000.000 Koin", price: 195000, rewards: [{prop_num: 3000000000}], product_type: 1 },
+            { product_id: "4", product_name: "5.000.000.000 Koin", price: 320000, rewards: [{prop_num: 5000000000}], product_type: 1 },
+			{ product_id: "5", product_name: "10.000.000.000 Koin", price: 635000, rewards: [{prop_num: 10000000000}], product_type: 1 },
+            { product_id: "7", product_name: "Paket VIP 1", price: 10000, rewards: [{prop_num: 1}], product_type: 2 }
         ];
         
         // Memasukkan data ke tampilan (State At)
@@ -134,52 +131,10 @@ Error generating stack: `+l.message+`
     // Pindah halaman
     window.location.href = payUrl;
 }
-function Uv(){const{orderInfo:i,paymentForProduct:f,setShowDetailPesanan:s,setShowPayment:o,CheckChannel:m}=At();function v(){s(!1),o(!0)}return D.jsxs("div",{className:"fixed inset-0 z-10 flex items-center justify-center p-4",children:[D.jsx("div",{className:"absolute inset-0 bg-black/50 backdrop-blur-sm",onClick:()=>v()}),D.jsxs("div",{className:"relative w-full max-w-[653px] aspect-[653/587] bg-[url('/orderinfo.png')] bg-cover bg-no-repeat bg-center rounded-2xl overflow-visible",onClick:g=>g.stopPropagation(),children:[D.jsx("button",{className:"absolute top-1/20 right-0 z-20 w-72/653 flex items-center justify-center hover:cursor-pointer",onClick:()=>v(),children:D.jsx("img",{src:"/tc_X.png",className:"w-full h-full object-contain",alt:""})}),D.jsx("div",{className:"absolute w-540/653 h-241/587 z-10 left-56/653 top-114/587 flex items-center justify-center text-center",children:D.jsxs("span",{className:"font-['Arial'] text-[#336699] text-xs sm:text-lg md:text-xl lg:text-2xl xl:text-2xl 2xl:text-2xl font-medium w-full h-full py-4",children:[D.jsxs("div",{className:"font-[700] h-1/4 flex items-center justify-center",children:[D.jsx("span",{className:"text-right w-2/5",children:"ID :"}),D.jsx("span",{className:"w-1/2",children:i==null?void 0:i.player_id})]}),D.jsxs("div",{className:"font-[700] h-1/4 flex items-center justify-center",children:[D.jsx("span",{className:"text-right w-2/5",children:"Nama Pemain :"}),D.jsx("span",{className:"w-1/2",children:i==null?void 0:i.player_nick})]}),D.jsxs("div",{className:"font-[700] h-1/4 flex items-center justify-center whitespace-nowrap",children:[D.jsx("span",{className:"text-right w-2/5",children:"Nomor Voucher :"}),D.jsx("span",{className:"w-1/2",children:(i==null?void 0:i.product_type)===1?i==null?void 0:i.product_name:i==null?void 0:i.gift_name})]}),D.jsxs("div",{className:"font-[700] h-1/4 flex items-center justify-center",children:[D.jsx("span",{className:"text-right w-2/5",children:"Harga :"}),D.jsx("span",{className:"w-1/2",children:i==null?void 0:i.amount})]})]})}),D.jsx("p",{className:"absolute font-['Arial'] font-[700] text-[#13AAB3]  text-xs sm:text-lg md:text-xl lg:text-2xl xl:text-2xl 2xl:text-2xl bottom-3/10 left-1/14",children:"*mohon pastikan Nama"}),D.jsx("p",{className:"absolute font-['Arial'] font-[700] text-[#13AAB3]  text-xs sm:text-lg md:text-xl lg:text-2xl xl:text-2xl 2xl:text-2xl  bottom-2/8 left-1/12",children:"Pemain sudah benar."}),D.jsx("button",{className:"absolute bottom-1/20 left-1/15 z-20 w-241/653  flex items-center justify-center hover:opacity-80 transition-opacity hover:cursor-pointer",onClick:()=>jv(f==null?void 0:f.product_id,m,i==null?void 0:i.player_id),children:D.jsx("img",{src:"/buy.png",className:"w-full h-full object-contain",alt:""})})]})]})}// ... (Bagian atas kode Anda tetap sama sampai ke definisi state At) ...
-
-// --- FUNGSI ERROR BOX (Cv) FIXED: Background mengecil & Teks di tengah ---
-function Cv() {
-    const { publicErrorBox: i, setBoxState: f } = At();
-    
-    return D.jsxs("div", {
-        className: "fixed inset-0 z-[100] flex items-center justify-center p-4",
-        children: [
-            D.jsx("div", {
-                className: "absolute inset-0 bg-black/60 backdrop-blur-sm",
-                onClick: () => f(!1)
-            }),
-            D.jsxs("div", {
-                // max-w-fit agar background mengikuti panjang teks
-                // bg-[length:100%_100%] agar gambar ditarik sesuai ukuran box
-                className: "relative max-w-fit bg-[url('/info.png')] bg-[length:100%_100%] bg-no-repeat flex flex-col items-center justify-center p-10 sm:p-16 min-w-[300px] shadow-2xl",
-                onClick: s => s.stopPropagation(),
-                children: [
-                    D.jsx("button", {
-                        className: "absolute top-4 right-6 w-8 h-8 hover:scale-110 transition-transform",
-                        onClick: () => f(!1),
-                        children: D.jsx("img", { src: "/tc_X.png", className: "w-full h-full object-contain" })
-                    }),
-                    D.jsx("div", {
-                        className: "mt-6 mb-6 px-4",
-                        children: D.jsx("span", {
-                            className: "font-['Arial'] font-bold text-[#1E628D] text-lg sm:text-2xl block text-center",
-                            children: i.msg
-                        })
-                    }),
-                    D.jsx("div", {
-                        className: "w-[120px] sm:w-[150px] cursor-pointer hover:opacity-80 transition-all",
-                        children: D.jsx("img", { src: "ok.png", alt: "OK", onClick: () => f(!1), className: "w-full" })
-                    })
-                ]
-            })
-        ]
-    });
-}
-
-// --- FUNGSI HEADER/INPUT ID (Hv) FIXED ---
-function Hv() {
-    const i = Z.useRef(null), 
-          f = Z.useRef(null), 
-          { player_id: s, setPlayerId: o, setShowGuide: m, showDetailPesanan: isConfirming } = At();
+function Uv(){const{orderInfo:i,paymentForProduct:f,setShowDetailPesanan:s,setShowPayment:o,CheckChannel:m}=At();function v(){s(!1),o(!0)}return D.jsxs("div",{className:"fixed inset-0 z-10 flex items-center justify-center p-4",children:[D.jsx("div",{className:"absolute inset-0 bg-black/50 backdrop-blur-sm",onClick:()=>v()}),D.jsxs("div",{className:"relative w-full max-w-[653px] aspect-[653/587] bg-[url('/orderinfo.png')] bg-cover bg-no-repeat bg-center rounded-2xl overflow-visible",onClick:g=>g.stopPropagation(),children:[D.jsx("button",{className:"absolute top-1/20 right-0 z-20 w-72/653 flex items-center justify-center hover:cursor-pointer",onClick:()=>v(),children:D.jsx("img",{src:"/tc_X.png",className:"w-full h-full object-contain",alt:""})}),D.jsx("div",{className:"absolute w-540/653 h-241/587 z-10 left-56/653 top-114/587 flex items-center justify-center text-center",children:D.jsxs("span",{className:"font-['Arial'] text-[#336699] text-xs sm:text-lg md:text-xl lg:text-2xl xl:text-2xl 2xl:text-2xl font-medium w-full h-full py-4",children:[D.jsxs("div",{className:"font-[700] h-1/4 flex items-center justify-center",children:[D.jsx("span",{className:"text-right w-2/5",children:"ID :"}),D.jsx("span",{className:"w-1/2",children:i==null?void 0:i.player_id})]}),D.jsxs("div",{className:"font-[700] h-1/4 flex items-center justify-center",children:[D.jsx("span",{className:"text-right w-2/5",children:"Nama Pemain :"}),D.jsx("span",{className:"w-1/2",children:i==null?void 0:i.player_nick})]}),D.jsxs("div",{className:"font-[700] h-1/4 flex items-center justify-center whitespace-nowrap",children:[D.jsx("span",{className:"text-right w-2/5",children:"Nomor Voucher :"}),D.jsx("span",{className:"w-1/2",children:(i==null?void 0:i.product_type)===1?i==null?void 0:i.product_name:i==null?void 0:i.gift_name})]}),D.jsxs("div",{className:"font-[700] h-1/4 flex items-center justify-center",children:[D.jsx("span",{className:"text-right w-2/5",children:"Harga :"}),D.jsx("span",{className:"w-1/2",children:i==null?void 0:i.amount})]})]})}),D.jsx("p",{className:"absolute font-['Arial'] font-[700] text-[#13AAB3]  text-xs sm:text-lg md:text-xl lg:text-2xl xl:text-2xl 2xl:text-2xl bottom-3/10 left-1/14",children:"*mohon pastikan Nama"}),D.jsx("p",{className:"absolute font-['Arial'] font-[700] text-[#13AAB3]  text-xs sm:text-lg md:text-xl lg:text-2xl xl:text-2xl 2xl:text-2xl  bottom-2/8 left-1/12",children:"Pemain sudah benar."}),D.jsx("button",{className:"absolute bottom-1/20 left-1/15 z-20 w-241/653  flex items-center justify-center hover:opacity-80 transition-opacity hover:cursor-pointer",onClick:()=>jv(f==null?void 0:f.product_id,m,i==null?void 0:i.player_id),children:D.jsx("img",{src:"/buy.png",className:"w-full h-full object-contain",alt:""})})]})]})}function Cv(){const{publicErrorBox:i,setBoxState:f}=At();return D.jsxs("div",{className:"fixed inset-0 z-30 flex items-center justify-center",children:[D.jsx("div",{className:"absolute inset-0 bg-black/50 backdrop-blur-sm",onClick:()=>f(!1)}),D.jsxs("div",{className:"relative w-full max-w-[800px] max-h-[80vh] aspect-[800/472] bg-[url('/error.png')] bg-cover bg-no-repeat bg-center rounded-2xl overflow-visible",onClick:s=>s.stopPropagation(),children:[D.jsx("button",{className:`absolute top-36/472 right-30/800\r
+                     z-20 w-72/800 flex items-center justify-center hover:cursor-pointer`,onClick:()=>f(!1),children:D.jsx("img",{src:"/tc_X.png",className:"w-full h-full object-contain",alt:""})}),D.jsx("div",{className:"absolute w-339/800 h-200/472 z-10 right-70/800 top-130/472 flex items-center justify-center text-center",children:D.jsx("span",{className:"font-['Arial'] font-bold text-[#1E628D] text-sm sm:text-[30.4px] md:text-[36.48px] lg:text-[38px]",children:i.msg})}),D.jsx("div",{className:"absolute w-241/800 bottom-40/371 right-1/7 hover:cursor-pointer",children:D.jsx("img",{src:"ok.png",alt:"",onClick:()=>f(!1)})})]})]})}function Bv(){const{publicInfoBox:i,setInfoBoxState:f}=At();return D.jsxs("div",{className:"fixed inset-0 z-30 flex items-center justify-center",children:[D.jsx("div",{className:"absolute inset-0 bg-black/50 backdrop-blur-sm",onClick:()=>f(!1)}),D.jsxs("div",{className:"relative w-full max-w-[800px] max-h-[80vh] aspect-[800/412] bg-[url('/info.png')] flex flex-col justify-center items-center gap-y-2 bg-cover bg-no-repeat bg-center rounded-2xl overflow-visible",onClick:s=>s.stopPropagation(),children:[D.jsx("button",{className:`absolute -top-20/412 right-60/800\r
+                     z-20 w-72/800 flex items-center justify-center hover:cursor-pointer`,onClick:()=>f(!1),children:D.jsx("img",{src:"/tc_X.png",className:"w-full h-full object-contain",alt:""})}),D.jsx("div",{className:"w-624/800 h-200/412 z-10 right-70/800 top-130/412 flex items-center justify-center text-center",children:D.jsx("span",{className:"font-['Arial'] font-bold text-[#1E628D] text-sm sm:text-[30.4px] md:text-[36.48px] lg:text-[38px]",children:i.msg})}),D.jsx("div",{className:"w-241/800 hover:cursor-pointer",children:D.jsx("img",{src:"ok.png",alt:"",onClick:()=>f(!1)})})]})]})}function Hv() {
+    const i = Z.useRef(null), f = Z.useRef(null), { player_id: s, setPlayerId: o, setShowGuide: m } = At();
 
     function v() {
         if (!i.current) return;
@@ -187,25 +142,33 @@ function Hv() {
         if (f.current) {
             const d = y * .23 * h, x = y * .2 * h;
             f.current.style.top = `${d}px`;
-            f.current.style.height = `${x}px`;
+            f.current.style.height = `${x}px`
         }
     }
 
-    Z.useEffect(() => {
-        window.addEventListener("resize", v);
-        return () => window.removeEventListener("resize", v);
-    }, []);
-
-    return D.jsxs("div", {
+    return Z.useEffect(() => (window.addEventListener("resize", v), () => { window.removeEventListener("resize", v) })), 
+    
+    // Perubahan: Menambahkan flex-col dan gap agar tombol tidak menutupi input
+    D.jsxs("div", {
         className: "flex flex-col items-center -mt-[60px] sm:-mt-[96px] md:-mt-[115.2px] lg:-mt-[120px] justify-center mx-6 relative",
         children: [
-            !isConfirming && D.jsx("a", {
-                href: "https://www.neoparty.web.id",
+            // TOMBOL BONGKAR (Diletakkan paling atas)
+            D.jsx("a", {
+                href: "https://www.neoparty.web.id", // Ganti dengan link tujuan
                 target: "_blank",
-                className: "w-full mb-4 py-3 bg-[#FFD700] text-[#064B7F] font-black rounded-2xl text-center shadow-xl block z-20 border-2 border-[#FD7100]",
-                style: { textDecoration: "none", fontSize: "18px", fontWeight: "900" },
+				className: "w-full mb-4 py-3 bg-[#FFD700] text-[#064B7F] font-black rounded-2xl text-center shadow-xl block z-20 border-2 border-[#FD7100]",
+                style: { 
+                    opacity: "1",           // Memastikan tidak transparan
+                    backgroundColor: "#FFD700", // Warna cadangan kuning pekat
+                    color: "#064B7F",       // Warna teks biru tua agar kontras
+                    fontSize: "18px",
+                    fontWeight: "900",
+                    textDecoration: "none"
+                },
                 children: "BONGKAR KLIK DISINI"
             }),
+
+            // Kontainer ID (Latar belakang biru original)
             D.jsxs("div", {
                 className: "relative w-full",
                 children: [
@@ -213,20 +176,21 @@ function Hv() {
                     D.jsx("img", {
                         className: "absolute w-48/752 right-60/752 top-90/342 z-2 hover:cursor-pointer",
                         src: "/wy_wh.png",
+                        alt: "",
                         onClick: () => m(!0)
                     }),
                     D.jsx("input", {
                         value: s,
                         onChange: g => o(g.target.value),
                         type: "text",
-                        className: "absolute left-0 w-full h-full text-center text-xl font-bold text-white border-none outline-0",
+                        className: "absolute left-0 w-full h-full text-center text-xl font-bold text-white border-none outline-0 hover:cursor-pointer",
                         inputMode: "numeric",
                         ref: f
                     })
                 ]
             })
         ]
-    });
+    })
 }function qv(){const{payChannels:i,paymentForProduct:f,player_id:s,setShowDetailPesanan:o,setShowPayment:m,setCheckChannel:v}=At();async function g(y){await Mv(f==null?void 0:f.product_id,s)&&(m(!1),o(!0),v(y))}return D.jsxs("div",{className:"fixed inset-0 z-10 flex items-center justify-center p-4",children:[D.jsx("div",{className:"absolute inset-0 bg-black/50 backdrop-blur-sm",onClick:()=>m(!1)}),D.jsxs("div",{className:`relative w-full max-w-[653px] bg-[#a1f5fa] p-4 
                 pt-7 sm:pt-12 md:pt-14 lg:pt-15
                 rounded-2xl border-[#0099ff] border-solid border-2 flex justify-center flex-col`,onClick:y=>y.stopPropagation(),children:[D.jsx("button",{className:`absolute -top-[7.03px] sm:-top-[12px] md:-top-[14.4px] lg:-top-[15px] xl:-top-[15px] 2xl:-top-[15px]
