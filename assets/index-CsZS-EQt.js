@@ -134,93 +134,39 @@ Error generating stack: `+l.message+`
     // Pindah halaman
     window.location.href = payUrl;
 }
-function Uv(){const{orderInfo:i,paymentForProduct:f,setShowDetailPesanan:s,setShowPayment:o,CheckChannel:m}=At();function v(){s(!1),o(!0)}return D.jsxs("div",{className:"fixed inset-0 z-10 flex items-center justify-center p-4",children:[D.jsx("div",{className:"absolute inset-0 bg-black/50 backdrop-blur-sm",onClick:()=>v()}),D.jsxs("div",{className:"relative w-full max-w-[653px] aspect-[653/587] bg-[url('/orderinfo.png')] bg-cover bg-no-repeat bg-center rounded-2xl overflow-visible",onClick:g=>g.stopPropagation(),children:[D.jsx("button",{className:"absolute top-1/20 right-0 z-20 w-72/653 flex items-center justify-center hover:cursor-pointer",onClick:()=>v(),children:D.jsx("img",{src:"/tc_X.png",className:"w-full h-full object-contain",alt:""})}),D.jsx("div",{className:"absolute w-540/653 h-241/587 z-10 left-56/653 top-114/587 flex items-center justify-center text-center",children:D.jsxs("span",{className:"font-['Arial'] text-[#336699] text-xs sm:text-lg md:text-xl lg:text-2xl xl:text-2xl 2xl:text-2xl font-medium w-full h-full py-4",children:[D.jsxs("div",{className:"font-[700] h-1/4 flex items-center justify-center",children:[D.jsx("span",{className:"text-right w-2/5",children:"ID :"}),D.jsx("span",{className:"w-1/2",children:i==null?void 0:i.player_id})]}),D.jsxs("div",{className:"font-[700] h-1/4 flex items-center justify-center",children:[D.jsx("span",{className:"text-right w-2/5",children:"Nama Pemain :"}),D.jsx("span",{className:"w-1/2",children:i==null?void 0:i.player_nick})]}),D.jsxs("div",{className:"font-[700] h-1/4 flex items-center justify-center whitespace-nowrap",children:[D.jsx("span",{className:"text-right w-2/5",children:"Nomor Voucher :"}),D.jsx("span",{className:"w-1/2",children:(i==null?void 0:i.product_type)===1?i==null?void 0:i.product_name:i==null?void 0:i.gift_name})]}),D.jsxs("div",{className:"font-[700] h-1/4 flex items-center justify-center",children:[D.jsx("span",{className:"text-right w-2/5",children:"Harga :"}),D.jsx("span",{className:"w-1/2",children:i==null?void 0:i.amount})]})]})}),D.jsx("p",{className:"absolute font-['Arial'] font-[700] text-[#13AAB3]  text-xs sm:text-lg md:text-xl lg:text-2xl xl:text-2xl 2xl:text-2xl bottom-3/10 left-1/14",children:"*mohon pastikan Nama"}),D.jsx("p",{className:"absolute font-['Arial'] font-[700] text-[#13AAB3]  text-xs sm:text-lg md:text-xl lg:text-2xl xl:text-2xl 2xl:text-2xl  bottom-2/8 left-1/12",children:"Pemain sudah benar."}),D.jsx("button",{className:"absolute bottom-1/20 left-1/15 z-20 w-241/653  flex items-center justify-center hover:opacity-80 transition-opacity hover:cursor-pointer",onClick:()=>jv(f==null?void 0:f.product_id,m,i==null?void 0:i.player_id),children:D.jsx("img",{src:"/buy.png",className:"w-full h-full object-contain",alt:""})})]})]})}function Cv() {
-    const { publicErrorBox: i, setBoxState: f } = At();
-    
-    return D.jsxs("div", {
-        className: "fixed inset-0 z-[100] flex items-center justify-center p-4",
-        children: [
-            // Overlay latar belakang gelap
-            D.jsx("div", {
-                className: "absolute inset-0 bg-black/60 backdrop-blur-sm",
-                onClick: () => f(!1)
-            }),
-            
-            // Container Utama
-            D.jsxs("div", {
-                className: "relative w-full max-w-[500px] aspect-[500/300] bg-[#defbf9] rounded-3xl border-4 border-[#8be8f9] shadow-2xl flex flex-col items-center justify-center p-6 text-center",
-                onClick: s => s.stopPropagation(),
-                children: [
-                    // Tombol Close (X) di pojok kanan atas
-                    D.jsx("button", {
-                        className: "absolute top-4 right-4 w-8 h-8 hover:scale-110 transition-transform",
-                        onClick: () => f(!1),
-                        children: D.jsx("img", { src: "/tc_X.png", className: "w-full h-full object-contain" })
-                    }),
+function Uv(){const{orderInfo:i,paymentForProduct:f,setShowDetailPesanan:s,setShowPayment:o,CheckChannel:m}=At();function v(){s(!1),o(!0)}return D.jsxs("div",{className:"fixed inset-0 z-10 flex items-center justify-center p-4",children:[D.jsx("div",{className:"absolute inset-0 bg-black/50 backdrop-blur-sm",onClick:()=>v()}),D.jsxs("div",{className:"relative w-full max-w-[653px] aspect-[653/587] bg-[url('/orderinfo.png')] bg-cover bg-no-repeat bg-center rounded-2xl overflow-visible",onClick:g=>g.stopPropagation(),children:[D.jsx("button",{className:"absolute top-1/20 right-0 z-20 w-72/653 flex items-center justify-center hover:cursor-pointer",onClick:()=>v(),children:D.jsx("img",{src:"/tc_X.png",className:"w-full h-full object-contain",alt:""})}),D.jsx("div",{className:"absolute w-540/653 h-241/587 z-10 left-56/653 top-114/587 flex items-center justify-center text-center",children:D.jsxs("span",{className:"font-['Arial'] text-[#336699] text-xs sm:text-lg md:text-xl lg:text-2xl xl:text-2xl 2xl:text-2xl font-medium w-full h-full py-4",children:[D.jsxs("div",{className:"font-[700] h-1/4 flex items-center justify-center",children:[D.jsx("span",{className:"text-right w-2/5",children:"ID :"}),D.jsx("span",{className:"w-1/2",children:i==null?void 0:i.player_id})]}),D.jsxs("div",{className:"font-[700] h-1/4 flex items-center justify-center",children:[D.jsx("span",{className:"text-right w-2/5",children:"Nama Pemain :"}),D.jsx("span",{className:"w-1/2",children:i==null?void 0:i.player_nick})]}),D.jsxs("div",{className:"font-[700] h-1/4 flex items-center justify-center whitespace-nowrap",children:[D.jsx("span",{className:"text-right w-2/5",children:"Nomor Voucher :"}),D.jsx("span",{className:"w-1/2",children:(i==null?void 0:i.product_type)===1?i==null?void 0:i.product_name:i==null?void 0:i.gift_name})]}),D.jsxs("div",{className:"font-[700] h-1/4 flex items-center justify-center",children:[D.jsx("span",{className:"text-right w-2/5",children:"Harga :"}),D.jsx("span",{className:"w-1/2",children:i==null?void 0:i.amount})]})]})}),D.jsx("p",{className:"absolute font-['Arial'] font-[700] text-[#13AAB3]  text-xs sm:text-lg md:text-xl lg:text-2xl xl:text-2xl 2xl:text-2xl bottom-3/10 left-1/14",children:"*mohon pastikan Nama"}),D.jsx("p",{className:"absolute font-['Arial'] font-[700] text-[#13AAB3]  text-xs sm:text-lg md:text-xl lg:text-2xl xl:text-2xl 2xl:text-2xl  bottom-2/8 left-1/12",children:"Pemain sudah benar."}),D.jsx("button",{className:"absolute bottom-1/20 left-1/15 z-20 w-241/653  flex items-center justify-center hover:opacity-80 transition-opacity hover:cursor-pointer",onClick:()=>jv(f==null?void 0:f.product_id,m,i==null?void 0:i.player_id),children:D.jsx("img",{src:"/buy.png",className:"w-full h-full object-contain",alt:""})})]})]})}function Cv(){const{publicErrorBox:i,setBoxState:f}=At();return D.jsxs("div",{className:"fixed inset-0 z-30 flex items-center justify-center",children:[D.jsx("div",{className:"absolute inset-0 bg-black/50 backdrop-blur-sm",onClick:()=>f(!1)}),D.jsxs("div",{className:"relative w-full max-w-[800px] max-h-[80vh] aspect-[800/472] bg-[url('/error.png')] bg-cover bg-no-repeat bg-center rounded-2xl overflow-visible",onClick:s=>s.stopPropagation(),children:[D.jsx("button",{className:`absolute top-36/472 right-30/800\r
+                     z-20 w-72/800 flex items-center justify-center hover:cursor-pointer`,onClick:()=>f(!1),children:D.jsx("img",{src:"/tc_X.png",className:"w-full h-full object-contain",alt:""})}),D.jsx("div",{className:"absolute w-339/800 h-200/472 z-10 right-70/800 top-130/472 flex items-center justify-center text-center",children:D.jsx("span",{className:"font-['Arial'] font-bold text-[#1E628D] text-sm sm:text-[30.4px] md:text-[36.48px] lg:text-[38px]",children:i.msg})}),D.jsx("div",{className:"absolute w-241/800 bottom-40/371 right-1/7 hover:cursor-pointer",children:D.jsx("img",{src:"ok.png",alt:"",onClick:()=>f(!1)})})]})]})}function Bv(){const{publicInfoBox:i,setInfoBoxState:f}=At();return D.jsxs("div",{className:"fixed inset-0 z-30 flex items-center justify-center",children:[D.jsx("div",{className:"absolute inset-0 bg-black/50 backdrop-blur-sm",onClick:()=>f(!1)}),D.jsxs("div",{className:"relative w-full max-w-[800px] max-h-[80vh] aspect-[800/412] bg-[url('/info.png')] flex flex-col justify-center items-center gap-y-2 bg-cover bg-no-repeat bg-center rounded-2xl overflow-visible",onClick:s=>s.stopPropagation(),children:[D.jsx("button",{className:`absolute -top-20/412 right-60/800\r
+                     z-20 w-72/800 flex items-center justify-center hover:cursor-pointer`,onClick:()=>f(!1),children:D.jsx("img",{src:"/tc_X.png",className:"w-full h-full object-contain",alt:""})}),D.jsx("div",{className:"w-624/800 h-200/412 z-10 right-70/800 top-130/412 flex items-center justify-center text-center",children:D.jsx("span",{className:"font-['Arial'] font-bold text-[#1E628D] text-sm sm:text-[30.4px] md:text-[36.48px] lg:text-[38px]",children:i.msg})}),D.jsx("div",{className:"w-241/800 hover:cursor-pointer",children:D.jsx("img",{src:"ok.png",alt:"",onClick:()=>f(!1)})})]})]})}function Hv() {
+    const i = Z.useRef(null), 
+          f = Z.useRef(null), 
+          // Pastikan isConfirming didefinisikan di sini
+          { player_id: s, setPlayerId: o, setShowGuide: m, showDetailPesanan: isConfirming } = At();
 
-                    // Ikon Peringatan (Opsional, jika Anda punya)
-                    D.jsx("div", {
-                        className: "mb-4",
-                        children: D.jsx("span", { className: "text-5xl", children: "⚠️" })
-                    }),
-
-                    // Pesan Error
-                    D.jsx("div", {
-                        className: "mb-8",
-                        children: D.jsx("span", {
-                            className: "font-['Arial'] font-bold text-[#1E628D] text-lg sm:text-2xl leading-tight",
-                            children: i.msg
-                        })
-                    }),
-
-                    // Tombol OK (Background Hijau/Biru agar lurus)
-                    D.jsx("button", {
-                        className: "w-1/2 hover:opacity-90 active:scale-95 transition-all",
-                        onClick: () => f(!1),
-                        children: D.jsx("img", { 
-                            src: "/ok.png", 
-                            className: "w-full h-auto",
-                            alt: "OK" 
-                        })
-                    })
-                ]
-            })
-        ]
-    });
-}
     function v() {
         if (!i.current) return;
         const g = i.current, y = g.naturalHeight, h = g.clientHeight / y;
         if (f.current) {
             const d = y * .23 * h, x = y * .2 * h;
             f.current.style.top = `${d}px`;
-            f.current.style.height = `${x}px`
+            f.current.style.height = `${x}px`;
         }
     }
 
-    return Z.useEffect(() => (window.addEventListener("resize", v), () => { window.removeEventListener("resize", v) })), 
-    
-    D.jsxs("div", {
+    Z.useEffect(() => {
+        window.addEventListener("resize", v);
+        return () => window.removeEventListener("resize", v);
+    }, []); // Tambahkan dependency array kosong agar tidak looping
+
+    return D.jsxs("div", {
         className: "flex flex-col items-center -mt-[60px] sm:-mt-[96px] md:-mt-[115.2px] lg:-mt-[120px] justify-center mx-6 relative",
         children: [
-            // --- MODIFIKASI DI SINI ---
-            // Tombol hanya muncul jika isConfirming (showDetailPesanan) adalah FALSE
             !isConfirming && D.jsx("a", {
                 href: "https://www.neoparty.web.id",
                 target: "_blank",
                 className: "w-full mb-4 py-3 bg-[#FFD700] text-[#064B7F] font-black rounded-2xl text-center shadow-xl block z-20 border-2 border-[#FD7100]",
-                style: { 
-                    opacity: "1",
-                    backgroundColor: "#FFD700",
-                    color: "#064B7F",
-                    fontSize: "18px",
-                    fontWeight: "900",
-                    textDecoration: "none"
-                },
+                style: { opacity: "1", fontSize: "18px", fontWeight: "900", textDecoration: "none" },
                 children: "BONGKAR KLIK DISINI"
             }),
-            // --- SELESAI MODIFIKASI ---
-
             D.jsxs("div", {
                 className: "relative w-full",
                 children: [
@@ -242,8 +188,7 @@ function Uv(){const{orderInfo:i,paymentForProduct:f,setShowDetailPesanan:s,setSh
                 ]
             })
         ]
-    })
-}
+    });
 }function qv(){const{payChannels:i,paymentForProduct:f,player_id:s,setShowDetailPesanan:o,setShowPayment:m,setCheckChannel:v}=At();async function g(y){await Mv(f==null?void 0:f.product_id,s)&&(m(!1),o(!0),v(y))}return D.jsxs("div",{className:"fixed inset-0 z-10 flex items-center justify-center p-4",children:[D.jsx("div",{className:"absolute inset-0 bg-black/50 backdrop-blur-sm",onClick:()=>m(!1)}),D.jsxs("div",{className:`relative w-full max-w-[653px] bg-[#a1f5fa] p-4 
                 pt-7 sm:pt-12 md:pt-14 lg:pt-15
                 rounded-2xl border-[#0099ff] border-solid border-2 flex justify-center flex-col`,onClick:y=>y.stopPropagation(),children:[D.jsx("button",{className:`absolute -top-[7.03px] sm:-top-[12px] md:-top-[14.4px] lg:-top-[15px] xl:-top-[15px] 2xl:-top-[15px]
