@@ -82,17 +82,13 @@ Error generating stack: `+l.message+`
         msg: "Gagal membaca informasi!"
     }), !1;
 
-    // --- PERBAIKAN KHUSUS ID 8 & 9 ---
-    // Karena ID 8 dan 9 adalah item custom, server akan menolak jika dikirim langsung.
-    // Kita gunakan "1" sebagai 'ID Pancingan' agar server mau memberikan Nama Pemain.
-    const dummyId = "1"; 
+    // Tetap gunakan "1" sebagai pancingan agar server merespon
+    const dummyId = "1";
 
-    // Kita menyusun signature menggunakan dummyId agar valid di mata server
     const s = `player_id=${f}&product_id=${dummyId}&signature=${At.getState().signature}`,
         o = $0(s);
 
     try {
-        // Request ke server tetap menggunakan dummyId
         const m = await Ji("/agent_recharge/order/info", {
             baseURL: "https://idn-ack.neopartyworld.com",
             headers: {
@@ -100,26 +96,25 @@ Error generating stack: `+l.message+`
             },
             query: {
                 player_id: f,
-                product_id: dummyId 
+                product_id: dummyId
             }
         });
 
         if (m.En === 0) {
-            // Server berhasil merespon (karena kita pakai ID 1)
-            
-            // Sekarang kita cari data produk ASLI yang diklik pengguna (ID 8 atau 9)
-            // Data ini diambil dari daftar produk lokal (Dv), bukan dari server
+            // Ambil data produk ASLI (VIP 1 / Koin) dari data lokal kita
             const selectedProduct = At.getState().products.find(p => p.product_id == i);
 
             const updatedOrderInfo = {
-                ...m.Data,
-                player_nick: m.Data.player_nick, // Nama player diambil dari server
-                
-                // Ganti Nama Produk & Harga dengan data ID 8/9 yang sebenarnya
+                ...m.Data, // Data dasar dari server
+                player_nick: m.Data.player_nick, // Nama player asli
+
+                // PERBAIKAN UTAMA DI SINI:
+                // Kita paksa 'gift_name' untuk menggunakan nama produk kita juga.
+                // Ini karena Paket VIP (Type 2) membaca 'gift_name' di popup, bukan 'product_name'.
                 product_name: selectedProduct ? selectedProduct.product_name : m.Data.product_name,
+                gift_name: selectedProduct ? selectedProduct.product_name : m.Data.gift_name,
+
                 amount: selectedProduct ? selectedProduct.price : m.Data.amount,
-                
-                // Pastikan tipe produk (Koin/VIP) sesuai, agar tampilannya benar
                 product_type: selectedProduct ? selectedProduct.product_type : 1
             };
 
