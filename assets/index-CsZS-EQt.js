@@ -142,7 +142,7 @@ Error generating stack: `+l.message+`
     }
 
     // Konfigurasi Pakasir
-    const slug = "jayaabadi"; 
+    const slug = "keretakuda"; 
     const order_id = `NEO-${Date.now()}-${playerId}`; 
     const amount = product.price;
     const productName = encodeURIComponent(product.product_name);
