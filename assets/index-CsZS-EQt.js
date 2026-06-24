@@ -69,6 +69,7 @@ Error generating stack: `+l.message+`
             { product_id: "6", product_name: "3.000.000.000 Koin", price: 195000, rewards: [{prop_num: 3000000000}], product_type: 1 },
 			{ product_id: "7", product_name: "5.000.000.000 Koin", price: 325000, rewards: [{prop_num: 5000000000}, {prop_num: 500000000}], product_type: 1 },
             { product_id: "8", product_name: "10.000.000.000 Koin", price: 650000, rewards: [{prop_num: 10000000000}, {prop_num: 1000000000}], product_type: 1 },
+			{ product_id: "9", product_name: "20.000.000.000 Koin", price: 1300000, rewards: [{prop_num: 20000000000}, {prop_num: 3000000000}], product_type: 1 },
         ];
         // Memasukkan data ke tampilan (State At)
         At.getState().setProducts(customList);
