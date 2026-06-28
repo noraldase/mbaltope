@@ -242,6 +242,10 @@ function Uv(){const{orderInfo:i,paymentForProduct:f,setShowDetailPesanan:s,setSh
                     className: "absolute left-0 w-full h-full text-center text-xl font-bold text-white border-none outline-0 hover:cursor-pointer",
                     inputMode: "numeric",
                     ref: f
+                }),
+                    D.jsx("p", {
+                    className: "mt-2 text-center font-poetsen text-[15px] drop-shadow bg-gradient-to-b bg-clip-text text-transparent from-[#FFFFFF] to-[#FFF2B4] [text-stroke:1px_#FD7100] [-webkit-text-stroke:1px_#FD7100]",
+                    children: "Tekan Nominal TopUp Untuk Melanjutkan Order"
                 })]
             })
         ]
