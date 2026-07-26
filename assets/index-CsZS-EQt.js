@@ -87,39 +87,32 @@ Error generating stack: `+l.message+`
 
     try {
         const res = await fetch(
-            "https://open-api.hidupcuan.org/api/player/get",
+            `https://neo-ack.theneoparty.com/agent_recharge/order/info?player_id=${Number(f)}&product_id=${i}`,
             {
-                method: "POST",
+                method: "GET",
                 headers: {
-                    "Content-Type": "application/json",
                     "Accept": "application/json"
-                },
-                body: JSON.stringify({
-                    PlayerID: Number(f)
-                })
+                }
             }
         );
 
         const m = await res.json();
 
-        if (m.status === "success" && m.data) {
-
-            const selectedProduct =
-                At.getState().products.find(
-                    p => p.product_id == i
-                );
+        if (m.En === 0 && m.Data) {
 
             const updatedOrderInfo = {
-                player_id: m.data.PlayerId,
-                player_nick: m.data.Nick,
-                level: m.data.Level,
-                vip: m.data.Vip,
-                coin: m.data.Coin,
+                player_id: m.Data.player_id,
+                player_nick: m.Data.player_nick,
 
-                product_name: selectedProduct?.product_name,
-                gift_name: selectedProduct?.product_name,
-                amount: selectedProduct?.price,
-                product_type: selectedProduct?.product_type || 1
+                // Dummy karena API baru tidak mengembalikan data ini
+                level: 0,
+                vip: 0,
+                coin: 0,
+
+                product_name: m.Data.product_name,
+                gift_name: m.Data.gift_name,
+                amount: m.Data.amount,
+                product_type: m.Data.product_type
             };
 
             At.getState().setOrderInfo(updatedOrderInfo);
