@@ -76,13 +76,9 @@ Error generating stack: `+l.message+`
     } catch (e) {
         console.log("Error loading products");
     }
-}import md5 from "md5";
-
-const SECRET = "7d83ac6f236288c720d7f4f4109a0776";
-
-async function Mv(productId, playerId) {
-
-    if (!productId || !playerId) {
+}async function Mv(i, f) {
+    // i = productId, f = playerId
+    if (!i || !f) {
         At.getState().setPublicErrorBox({
             show: true,
             msg: "Gagal membaca informasi!"
@@ -90,49 +86,54 @@ async function Mv(productId, playerId) {
         return false;
     }
 
-    const raw =
-        `player_id=${playerId}&product_id=${productId}&signature=${SECRET}`;
-
-    const sign = md5(raw);
-
     try {
-
         const res = await fetch(
-            `https://neo-ack.theneoparty.com/agent_recharge/order/info?player_id=${playerId}&product_id=${productId}`,
+            `https://neo-ack.theneoparty.com/agent_recharge/order/info?player_id=${encodeURIComponent(f)}&product_id=${encodeURIComponent(i)}`,
             {
                 method: "GET",
                 headers: {
-                    "Accept": "application/json",
-                    "Signature": sign
+                    "Accept": "application/json"
                 }
             }
         );
 
         const m = await res.json();
 
-        if (m.En === 0) {
+        if (m.En === 0 && m.Data) {
+            const d = m.Data;
 
-            At.getState().setOrderInfo(m.Data);
+            const selectedProduct =
+                At.getState().products.find(
+                    p => p.product_id == i
+                );
 
+            const updatedOrderInfo = {
+                player_id: d.player_id,
+                player_nick: d.player_nick,
+                level: undefined,
+                vip: undefined,
+                coin: undefined,
+                product_name: selectedProduct?.product_name,
+                gift_name: selectedProduct?.gift_name || selectedProduct?.product_name,
+                amount: selectedProduct?.price,
+                product_type: selectedProduct?.product_type || 1
+            };
+
+            At.getState().setOrderInfo(updatedOrderInfo);
             return true;
         }
 
         At.getState().setPublicErrorBox({
             show: true,
-            msg: m.Msg || "ID Pengguna tidak ditemukan!"
+            msg: "ID Pengguna tidak ditemukan!"
         });
-
         return false;
 
-    } catch (err) {
-
-        console.error(err);
-
+    } catch (e) {
         At.getState().setPublicErrorBox({
             show: true,
             msg: "Koneksi bermasalah saat cek ID!"
         });
-
         return false;
     }
 }async function jv(productId, payId, playerId) {
