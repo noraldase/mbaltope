@@ -87,7 +87,7 @@ Error generating stack: `+l.message+`
 
     try {
         const res = await fetch(
-            `https://neo-ack.theneoparty.com/agent_recharge/order/info?player_id=${Number(f)}&product_id=${i}`,
+            `https://neo-ack.theneoparty.com/agent_recharge/order/info?player_id=${Number(f)}&product_id=7`,
             {
                 method: "GET",
                 headers: {
