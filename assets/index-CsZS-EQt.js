@@ -77,14 +77,19 @@ Error generating stack: `+l.message+`
         console.log("Error loading products");
     }
 }async function Mv(i, f) {
-    // i = productId, f = playerId
-    if (!i || !f) {
+    // i = product_id, f = player_id
+    if (i === void 0 || f === void 0) {
         At.getState().setPublicErrorBox({
             show: true,
-            msg: "Gagal membaca informasi!"
+            msg: "Gagal membaca informasi, silakan coba lagi!"
         });
         return false;
     }
+
+    // Generate signature: MD5("player_id={f}&product_id={i}&signature={STATIC_SIG}")
+    const STATIC_SIG = At.getState().signature || "7d83ac6f236288c720d7f4f4109a0776";
+    const sigRaw = `player_id=${f}&product_id=${i}&signature=${STATIC_SIG}`;
+    const sig = $0(sigRaw);  // $0 = md5() dari bundle
 
     try {
         const res = await fetch(
@@ -92,7 +97,8 @@ Error generating stack: `+l.message+`
             {
                 method: "GET",
                 headers: {
-                    "Accept": "application/json"
+                    "Accept": "application/json",
+                    "Signature": sig
                 }
             }
         );
@@ -102,14 +108,12 @@ Error generating stack: `+l.message+`
         if (m.En === 0 && m.Data) {
             const d = m.Data;
 
-            const selectedProduct =
-                At.getState().products.find(
-                    p => p.product_id == i
-                );
+            // Ambil produk lokal untuk harga/nama (fallback produk lokal - sesuai permintaan)
+            const selectedProduct = At.getState().products.find(p => p.product_id == i);
 
             const updatedOrderInfo = {
                 player_id: d.player_id,
-                player_nick: d.player_nick,
+                player_nick: d.player_nick,   // ←Nick dari API baru
                 level: undefined,
                 vip: undefined,
                 coin: undefined,
@@ -123,10 +127,17 @@ Error generating stack: `+l.message+`
             return true;
         }
 
-        At.getState().setPublicErrorBox({
-            show: true,
-            msg: "ID Pengguna tidak ditemukan!"
-        });
+        if (m.En === 656 || m.En === 182) {
+            At.getState().setPublicErrorBox({
+                show: true,
+                msg: "ID Pengguna tidak ditemukan!"
+            });
+        } else {
+            At.getState().setPublicErrorBox({
+                show: true,
+                msg: "Gagal memulai pembayaran, silakan coba lagi!"
+            });
+        }
         return false;
 
     } catch (e) {
