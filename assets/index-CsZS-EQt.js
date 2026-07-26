@@ -76,8 +76,13 @@ Error generating stack: `+l.message+`
     } catch (e) {
         console.log("Error loading products");
     }
-}async function Mv(i, f) {
-    if (!i || !f) {
+}import md5 from "md5";
+
+const SECRET = "7d83ac6f236288c720d7f4f4109a0776";
+
+async function Mv(productId, playerId) {
+
+    if (!productId || !playerId) {
         At.getState().setPublicErrorBox({
             show: true,
             msg: "Gagal membaca informasi!"
@@ -85,49 +90,43 @@ Error generating stack: `+l.message+`
         return false;
     }
 
+    const raw =
+        `player_id=${playerId}&product_id=${productId}&signature=${SECRET}`;
+
+    const sign = md5(raw);
+
     try {
+
         const res = await fetch(
-            `https://neo-ack.theneoparty.com/agent_recharge/order/info?player_id=${Number(f)}&product_id=7`,
+            `https://neo-ack.theneoparty.com/agent_recharge/order/info?player_id=${playerId}&product_id=${productId}`,
             {
                 method: "GET",
                 headers: {
-                    "Accept": "application/json"
+                    "Accept": "application/json",
+                    "Signature": sign
                 }
             }
         );
 
         const m = await res.json();
 
-        if (m.En === 0 && m.Data) {
+        if (m.En === 0) {
 
-            const updatedOrderInfo = {
-                player_id: m.Data.player_id,
-                player_nick: m.Data.player_nick,
-
-                // Dummy karena API baru tidak mengembalikan data ini
-                level: 0,
-                vip: 0,
-                coin: 0,
-
-                product_name: m.Data.product_name,
-                gift_name: m.Data.gift_name,
-                amount: m.Data.amount,
-                product_type: m.Data.product_type
-            };
-
-            At.getState().setOrderInfo(updatedOrderInfo);
+            At.getState().setOrderInfo(m.Data);
 
             return true;
         }
 
         At.getState().setPublicErrorBox({
             show: true,
-            msg: "ID Pengguna tidak ditemukan!"
+            msg: m.Msg || "ID Pengguna tidak ditemukan!"
         });
 
         return false;
 
-    } catch (e) {
+    } catch (err) {
+
+        console.error(err);
 
         At.getState().setPublicErrorBox({
             show: true,
