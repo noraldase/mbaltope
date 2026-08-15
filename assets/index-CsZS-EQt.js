@@ -61,15 +61,14 @@ Error generating stack: `+l.message+`
     try {
         // Data yang kita masukkan sendiri (Bukan dari API luar)
         var customList = [
-            { product_id: "1", product_name: "250.000.000 Koin", price: 20000, rewards: [{prop_num: 250000000}], product_type: 1 },
-            { product_id: "2", product_name: "350.000.000 Koin", price: 25000, rewards: [{prop_num: 350000000}], product_type: 1 },
-            { product_id: "3", product_name: "500.000.000 Koin", price: 32500, rewards: [{prop_num: 500000000}], product_type: 1 },
-			{ product_id: "4", product_name: "1.000.000.000 Koin", price: 65000, rewards: [{prop_num: 1000000000}], product_type: 1 },
-            { product_id: "5", product_name: "2.000.000.000 Koin", price: 130000, rewards: [{prop_num: 2000000000}], product_type: 1 },
-            { product_id: "6", product_name: "3.000.000.000 Koin", price: 195000, rewards: [{prop_num: 3000000000}], product_type: 1 },
+            { product_id: "1", product_name: "250.000.000 Koin", price: 20000, rewards: [{prop_num: 250000000}, {prop_num: 25000000}], product_type: 1 },
+            { product_id: "2", product_name: "350.000.000 Koin", price: 25000, rewards: [{prop_num: 350000000}, {prop_num: 35000000}], product_type: 1 },
+            { product_id: "3", product_name: "500.000.000 Koin", price: 32500, rewards: [{prop_num: 500000000}, {prop_num: 50000000}], product_type: 1 },
+			{ product_id: "4", product_name: "1.000.000.000 Koin", price: 65000, rewards: [{prop_num: 1000000000}, {prop_num: 100000000}], product_type: 1 },
+            { product_id: "5", product_name: "2.000.000.000 Koin", price: 130000, rewards: [{prop_num: 2000000000}, {prop_num: 200000000}], product_type: 1 },
+            { product_id: "6", product_name: "3.000.000.000 Koin", price: 195000, rewards: [{prop_num: 3000000000}, {prop_num: 300000000}], product_type: 1 },
 			{ product_id: "7", product_name: "5.000.000.000 Koin", price: 325000, rewards: [{prop_num: 5000000000}, {prop_num: 500000000}], product_type: 1 },
             { product_id: "8", product_name: "10.000.000.000 Koin", price: 650000, rewards: [{prop_num: 10000000000}, {prop_num: 1000000000}], product_type: 1 },
-			{ product_id: "9", product_name: "20.000.000.000 Koin", price: 1300000, rewards: [{prop_num: 20000000000}, {prop_num: 3000000000}], product_type: 1 },
         ];
         // Memasukkan data ke tampilan (State At)
         At.getState().setProducts(customList);
@@ -147,28 +146,258 @@ Error generating stack: `+l.message+`
         });
         return false;
     }
-}async function jv(productId, payId, playerId) {
+}
+// ================= KONFIGURASI QRIS STATIS =================
+// Payload QRIS merchant statis (dasar). Nominal + nama merchant di-inject via API bubukaja.
+const QRIS_BASE_PAYLOAD = "00020101021126570011ID.DANA.WWW011893600915303411534902090341153490303UMI51440014ID.CO.QRIS.WWW0215ID10265714064160303UMI5204581253033605802ID590938 Street6015Kota Jakarta Pu6105103406304FA70";
+const QRIS_API_URL = "https://bubukaja.vercel.app/api/api.php";
+const QRIS_MERCHANT = "Neo Party";
+const QRIS_CITY = "Kota Jakarta";
+const QRIS_POSTAL = "14320";
+
+function qrisInjectStyles() {
+    if (document.getElementById("qris-modal-styles")) return;
+    const st = document.createElement("style");
+    st.id = "qris-modal-styles";
+    st.textContent = `
+    #qris-overlay{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;padding:16px;font-family:'Inter',system-ui,-apple-system,sans-serif;}
+    #qris-overlay .qris-backdrop{position:absolute;inset:0;background:rgba(3,20,40,.72);backdrop-filter:blur(6px);}
+    #qris-overlay .qris-card{position:relative;width:100%;max-width:400px;max-height:92vh;overflow-y:auto;border-radius:26px;background:linear-gradient(165deg,#ffffff 0%,#eafcff 100%);box-shadow:0 24px 70px rgba(0,40,80,.5);border:2px solid #33ccff;animation:qrisPop .32s cubic-bezier(.16,1,.3,1);}
+    @keyframes qrisPop{0%{opacity:0;transform:translateY(24px) scale(.94)}100%{opacity:1;transform:translateY(0) scale(1)}}
+    #qris-overlay .qris-head{background:linear-gradient(120deg,#0a86c9,#13aac3 55%,#0dd0b8);padding:20px 22px 16px;text-align:center;color:#fff;position:relative;}
+    #qris-overlay .qris-head h2{margin:0;font-size:19px;font-weight:800;letter-spacing:.3px;}
+    #qris-overlay .qris-head .qris-merchant{margin-top:3px;font-size:12.5px;opacity:.92;font-weight:600;}
+    #qris-overlay .qris-close{position:absolute;top:12px;right:14px;width:30px;height:30px;border:none;border-radius:50%;background:rgba(255,255,255,.22);color:#fff;font-size:18px;line-height:1;cursor:pointer;transition:.2s;}
+    #qris-overlay .qris-close:hover{background:rgba(255,255,255,.4);transform:rotate(90deg);}
+    #qris-overlay .qris-body{padding:18px 22px 22px;}
+    #qris-overlay .qris-prod{text-align:center;font-size:14px;font-weight:700;color:#0a5b8a;margin-bottom:2px;}
+    #qris-overlay .qris-amount{text-align:center;font-size:34px;font-weight:900;color:#064B7F;line-height:1.1;letter-spacing:-.5px;}
+    #qris-overlay .qris-amount small{font-size:16px;font-weight:800;vertical-align:top;margin-right:2px;}
+    #qris-overlay .qris-id{text-align:center;font-size:11.5px;color:#5a7186;margin-top:4px;}
+    #qris-overlay .qris-qrwrap{margin:16px auto 12px;width:250px;max-width:78%;background:#fff;border:3px solid #0dd0b8;border-radius:20px;padding:12px;box-shadow:0 8px 24px rgba(13,208,184,.22);position:relative;}
+    #qris-overlay .qris-qrwrap img{width:100%;display:block;border-radius:8px;}
+    #qris-overlay .qris-qrlogo{position:absolute;top:2px;left:50%;transform:translateX(-50%) translateY(-52%);background:#fff;padding:2px 12px;border-radius:20px;font-size:11px;font-weight:900;color:#0a86c9;letter-spacing:1px;border:2px solid #0dd0b8;}
+    #qris-overlay .qris-timer{text-align:center;font-size:13px;font-weight:700;color:#e0533b;margin:4px 0 12px;}
+    #qris-overlay .qris-timer.ok{color:#0a9e4f;}
+    #qris-overlay .qris-steps{background:#eafcff;border:1.5px dashed #33ccff;border-radius:14px;padding:11px 14px;font-size:12px;color:#245b7a;line-height:1.55;}
+    #qris-overlay .qris-steps b{color:#064B7F;}
+    #qris-overlay .qris-pays{display:flex;justify-content:center;gap:8px;margin:12px 0 6px;flex-wrap:wrap;}
+    #qris-overlay .qris-pays span{font-size:10.5px;font-weight:700;color:#0a86c9;background:#dff6ff;border:1px solid #9fdcff;border-radius:20px;padding:3px 10px;}
+    #qris-overlay .qris-btn{width:100%;border:none;border-radius:14px;padding:13px;font-size:15px;font-weight:800;cursor:pointer;transition:.2s;margin-top:10px;}
+    #qris-overlay .qris-btn-done{background:linear-gradient(120deg,#13aac3,#0dd0b8);color:#fff;box-shadow:0 8px 20px rgba(13,208,184,.4);}
+    #qris-overlay .qris-btn-done:hover{filter:brightness(1.06);transform:translateY(-1px);}
+    #qris-overlay .qris-loading{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:46px 20px;color:#0a86c9;}
+    #qris-overlay .qris-spin{width:44px;height:44px;border:4px solid #cfeffb;border-top-color:#0dd0b8;border-radius:50%;animation:qrisSpin .8s linear infinite;margin-bottom:16px;}
+    @keyframes qrisSpin{to{transform:rotate(360deg)}}
+    /* ===== Thank You screen ===== */
+    #qris-overlay .qris-thanks{padding:34px 26px 30px;text-align:center;position:relative;overflow:hidden;}
+    #qris-overlay .qris-check{width:92px;height:92px;margin:6px auto 20px;border-radius:50%;background:linear-gradient(135deg,#0dd0b8,#0a9e6f);display:flex;align-items:center;justify-content:center;box-shadow:0 12px 30px rgba(13,208,184,.45);animation:qrisCheckPop .5s cubic-bezier(.16,1.2,.4,1) both;}
+    #qris-overlay .qris-check svg{width:48px;height:48px;stroke:#fff;stroke-width:4;fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:48;stroke-dashoffset:48;animation:qrisDraw .5s .28s forwards ease;}
+    @keyframes qrisCheckPop{0%{transform:scale(0) rotate(-25deg);opacity:0}100%{transform:scale(1) rotate(0);opacity:1}}
+    @keyframes qrisDraw{to{stroke-dashoffset:0}}
+    #qris-overlay .qris-thanks h2{margin:0 0 6px;font-size:26px;font-weight:900;color:#064B7F;letter-spacing:-.3px;}
+    #qris-overlay .qris-thanks .qris-sub{font-size:14px;font-weight:600;color:#13AAB3;line-height:1.5;margin-bottom:18px;}
+    #qris-overlay .qris-receipt{background:#eafcff;border:1.5px dashed #33ccff;border-radius:16px;padding:14px 18px;margin:0 auto 20px;text-align:left;font-size:13px;}
+    #qris-overlay .qris-receipt .row{display:flex;justify-content:space-between;padding:5px 0;color:#245b7a;font-weight:600;}
+    #qris-overlay .qris-receipt .row b{color:#064B7F;font-weight:800;text-align:right;}
+    #qris-overlay .qris-receipt .row.total{border-top:1.5px dashed #9fdcff;margin-top:4px;padding-top:9px;font-size:15px;}
+    #qris-overlay .qris-receipt .row.total b{color:#0a9e4f;}
+    #qris-overlay .qris-note{font-size:12px;color:#5a7186;line-height:1.55;margin-bottom:16px;}
+    #qris-overlay .qris-confetti{position:absolute;top:-10px;width:9px;height:14px;opacity:0;border-radius:2px;animation:qrisFall 2.4s ease-in forwards;}
+    @keyframes qrisFall{0%{opacity:1;transform:translateY(-10px) rotate(0)}100%{opacity:0;transform:translateY(360px) rotate(540deg)}}
+    `;
+    document.head.appendChild(st);
+}
+
+function qrisCloseModal() {
+    const el = document.getElementById("qris-overlay");
+    if (el) { if (el._timer) clearInterval(el._timer); el.remove(); }
+}
+
+function qrisRenderLoading() {
+    qrisInjectStyles();
+    qrisCloseModal();
+    const ov = document.createElement("div");
+    ov.id = "qris-overlay";
+    ov.innerHTML = `<div class="qris-backdrop"></div>
+      <div class="qris-card"><div class="qris-loading">
+        <div class="qris-spin"></div>
+        <div style="font-weight:800;font-size:15px;">Membuat QRIS...</div>
+        <div style="font-size:12px;color:#5a7186;margin-top:4px;">Mohon tunggu sebentar</div>
+      </div></div>`;
+    document.body.appendChild(ov);
+    return ov;
+}
+
+function qrisRenderThanks({ amount, productName, playerId }) {
+    qrisInjectStyles();
+    qrisCloseModal();
+    const now = new Date();
+    const waktu = now.toLocaleString("id-ID", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
+    const trxId = "NEO" + now.getTime().toString().slice(-8);
+    const ov = document.createElement("div");
+    ov.id = "qris-overlay";
+    ov.innerHTML = `
+      <div class="qris-backdrop"></div>
+      <div class="qris-card">
+        <div class="qris-thanks">
+          <div class="qris-check">
+            <svg viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5"/></svg>
+          </div>
+          <h2>Terima Kasih!</h2>
+          <div class="qris-sub">Terima kasih telah melakukan Top Up<br>di <b>${QRIS_MERCHANT}</b> 🎉</div>
+          <div class="qris-receipt">
+            <div class="row"><span>Produk</span><b>${productName}</b></div>
+            <div class="row"><span>ID Player</span><b>${playerId}</b></div>
+            <div class="row"><span>No. Transaksi</span><b>${trxId}</b></div>
+            <div class="row"><span>Waktu</span><b>${waktu}</b></div>
+            <div class="row total"><span>Total Bayar</span><b>Rp ${Number(amount).toLocaleString("id-ID")}</b></div>
+          </div>
+          <div class="qris-note">Pesanan kamu sedang diproses. Koin akan otomatis masuk ke akun dalam beberapa saat. Simpan No. Transaksi untuk keperluan konfirmasi.</div>
+          <button class="qris-btn qris-btn-done" id="qris-thx-close">Selesai</button>
+        </div>
+      </div>`;
+    document.body.appendChild(ov);
+
+    ov.querySelector(".qris-backdrop").onclick = qrisCloseModal;
+    ov.querySelector("#qris-thx-close").onclick = qrisCloseModal;
+
+    // Confetti kecil
+    const colors = ["#0dd0b8", "#13aac3", "#FFD700", "#FD7100", "#33ccff", "#0a9e4f"];
+    const card = ov.querySelector(".qris-thanks");
+    for (let k = 0; k < 24; k++) {
+        const c = document.createElement("div");
+        c.className = "qris-confetti";
+        c.style.left = Math.random() * 100 + "%";
+        c.style.background = colors[k % colors.length];
+        c.style.animationDelay = (Math.random() * 0.5) + "s";
+        c.style.transform = "rotate(" + (Math.random() * 360) + "deg)";
+        card.appendChild(c);
+    }
+
+    return ov;
+}
+
+function qrisRenderModal({ qrUrl, payload, amount, productName, playerId }) {
+    qrisInjectStyles();
+    qrisCloseModal();
+    const rp = "Rp " + Number(amount).toLocaleString("id-ID");
+    const ov = document.createElement("div");
+    ov.id = "qris-overlay";
+    ov.innerHTML = `
+      <div class="qris-backdrop"></div>
+      <div class="qris-card">
+        <div class="qris-head">
+          <button class="qris-close" aria-label="Tutup">&times;</button>
+          <h2>Pembayaran QRIS</h2>
+          <div class="qris-merchant">${QRIS_MERCHANT}</div>
+        </div>
+        <div class="qris-body">
+          <div class="qris-prod">${productName}</div>
+          <div class="qris-amount"><small>Rp</small>${Number(amount).toLocaleString("id-ID")}</div>
+          <div class="qris-id">ID Player: <b>${playerId}</b></div>
+          <div class="qris-qrwrap">
+            <div class="qris-qrlogo">QRIS</div>
+            <img src="${qrUrl}" alt="QRIS ${QRIS_MERCHANT}" />
+          </div>
+          <div class="qris-timer" id="qris-timer">Selesaikan dalam 05:00</div>
+          <div class="qris-pays"><span>DANA</span><span>GoPay</span><span>OVO</span><span>ShopeePay</span><span>m-Banking</span></div>
+          <div class="qris-steps">
+            <b>Cara bayar:</b><br>
+            1. Buka aplikasi e-wallet / m-banking<br>
+            2. Pilih <b>Scan QRIS</b> lalu arahkan ke kode di atas<br>
+            3. Pastikan nominal <b>${rp}</b> &amp; merchant <b>${QRIS_MERCHANT}</b><br>
+            4. Selesaikan pembayaran, koin masuk otomatis
+          </div>
+          <button class="qris-btn qris-btn-done" id="qris-done">Saya Sudah Bayar</button>
+        </div>
+      </div>`;
+    document.body.appendChild(ov);
+
+    ov.querySelector(".qris-backdrop").onclick = qrisCloseModal;
+    ov.querySelector(".qris-close").onclick = qrisCloseModal;
+
+    ov.querySelector("#qris-done").onclick = function () {
+        if (ov._timer) clearInterval(ov._timer);
+        qrisRenderThanks({ amount: amount, productName: productName, playerId: playerId });
+    };
+
+    // Countdown 5 menit
+    let secs = 300;
+    const tEl = ov.querySelector("#qris-timer");
+    ov._timer = setInterval(() => {
+        secs--;
+        if (secs <= 0) {
+            clearInterval(ov._timer);
+            tEl.textContent = "Waktu habis, silakan ulangi pemesanan";
+            tEl.classList.remove("ok");
+            return;
+        }
+        const mm = String(Math.floor(secs / 60)).padStart(2, "0");
+        const ss = String(secs % 60).padStart(2, "0");
+        tEl.textContent = `Selesaikan dalam ${mm}:${ss}`;
+        tEl.classList.toggle("ok", secs > 60);
+    }, 1000);
+
+    return ov;
+}
+
+async function jv(productId, payId, playerId) {
     const state = At.getState();
     const product = state.products.find(p => p.product_id == productId);
-    
+
     if (!playerId) {
         state.setPublicErrorBox({ show: true, msg: "ID Player wajib diisi!" });
         return;
     }
+    if (!product) {
+        state.setPublicErrorBox({ show: true, msg: "Produk tidak ditemukan!" });
+        return;
+    }
 
-    // Konfigurasi Pakasir
-    const slug = "NeoStore"; 
-    const order_id = `NEO-${Date.now()}-${playerId}`; 
+    // Nominal = harga produk yang dipesan, TANPA fee tambahan
     const amount = product.price;
-    const productName = encodeURIComponent(product.product_name);
 
-    // PENYEMPURNAAN: Menitipkan data di dalam URL redirect agar bisa ditangkap di halaman success
-    const redirectUrl = `https://topup.neoparty.web.id/success.html?id=${playerId}&name=${productName}&pay=${amount}`;
+    // Tutup popup detail & tampilkan loading QRIS
+    state.setShowDetailPesanan(false);
+    state.setShowPayment(false);
+    qrisRenderLoading();
 
-    const payUrl = `https://app.pakasir.com/pay/${slug}/${amount}?order_id=${order_id}&qris_only=1&redirect=${encodeURIComponent(redirectUrl)}`;
+    try {
+        const res = await fetch(QRIS_API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                amount: amount,
+                city_name: QRIS_CITY,
+                fee_type: "none",
+                fee_value: 0,
+                merchant_name: QRIS_MERCHANT,
+                postal_code: QRIS_POSTAL,
+                qris_payload: QRIS_BASE_PAYLOAD
+            })
+        });
+        const json = await res.json();
 
-    // Pindah halaman
-    window.location.href = payUrl;
+        if (!json || !json.success || !json.data || !json.data.modified) {
+            throw new Error((json && json.error) || "Gagal membuat QRIS");
+        }
+
+        const mod = json.data.modified;
+        const qrUrl = json.data.qr_code_url
+            || ("https://api.qrserver.com/v1/create-qr-code/?size=500x500&margin=10&data=" + encodeURIComponent(mod.payload));
+
+        qrisRenderModal({
+            qrUrl: qrUrl,
+            payload: mod.payload,
+            amount: mod.total_amount || amount,
+            productName: product.product_name,
+            playerId: playerId
+        });
+    } catch (e) {
+        qrisCloseModal();
+        state.setPublicErrorBox({ show: true, msg: "Gagal membuat QRIS. Coba lagi." });
+    }
 }
 function Uv(){const{orderInfo:i,paymentForProduct:f,setShowDetailPesanan:s,setShowPayment:o,CheckChannel:m}=At();function v(){s(!1),o(!0)}return D.jsxs("div",{className:"fixed inset-0 z-10 flex items-center justify-center p-4",children:[D.jsx("div",{className:"absolute inset-0 bg-black/50 backdrop-blur-sm",onClick:()=>v()}),D.jsxs("div",{className:"relative w-full max-w-[653px] aspect-[653/587] bg-[url('/orderinfo.png')] bg-cover bg-no-repeat bg-center rounded-2xl overflow-visible",onClick:g=>g.stopPropagation(),children:[D.jsx("button",{className:"absolute top-1/20 right-0 z-20 w-72/653 flex items-center justify-center hover:cursor-pointer",onClick:()=>v(),children:D.jsx("img",{src:"/tc_X.png",className:"w-full h-full object-contain",alt:""})}),D.jsx("div",{className:"absolute w-540/653 h-241/587 z-10 left-56/653 top-114/587 flex items-center justify-center text-center",children:D.jsxs("span",{className:"font-['Arial'] text-[#336699] text-xs sm:text-lg md:text-xl lg:text-2xl xl:text-2xl 2xl:text-2xl font-medium w-full h-full py-4",children:[D.jsxs("div",{className:"font-[700] h-1/4 flex items-center justify-center",children:[D.jsx("span",{className:"text-right w-2/5",children:"ID :"}),D.jsx("span",{className:"w-1/2",children:i==null?void 0:i.player_id})]}),D.jsxs("div",{className:"font-[700] h-1/4 flex items-center justify-center",children:[D.jsx("span",{className:"text-right w-2/5",children:"Nama Pemain :"}),D.jsx("span",{className:"w-1/2",children:i==null?void 0:i.player_nick})]}),D.jsxs("div",{className:"font-[700] h-1/4 flex items-center justify-center whitespace-nowrap",children:[D.jsx("span",{className:"text-right w-2/5",children:"Nomor Voucher :"}),D.jsx("span",{className:"w-1/2",children:(i==null?void 0:i.product_type)===1?i==null?void 0:i.product_name:i==null?void 0:i.gift_name})]}),D.jsxs("div",{className:"font-[700] h-1/4 flex items-center justify-center",children:[D.jsx("span",{className:"text-right w-2/5",children:"Harga :"}),D.jsx("span",{className:"w-1/2",children:i==null?void 0:i.amount})]})]})}),D.jsx("p",{className:"absolute font-['Arial'] font-[700] text-[#13AAB3]  text-xs sm:text-lg md:text-xl lg:text-2xl xl:text-2xl 2xl:text-2xl bottom-3/10 left-1/14",children:"*mohon pastikan Nama"}),D.jsx("p",{className:"absolute font-['Arial'] font-[700] text-[#13AAB3]  text-xs sm:text-lg md:text-xl lg:text-2xl xl:text-2xl 2xl:text-2xl  bottom-2/8 left-1/12",children:"Pemain sudah benar."}),D.jsx("button",{className:"absolute bottom-1/20 left-1/15 z-20 w-241/653  flex items-center justify-center hover:opacity-80 transition-opacity hover:cursor-pointer",onClick:()=>jv(f==null?void 0:f.product_id,m,i==null?void 0:i.player_id),children:D.jsx("img",{src:"/buy.png",className:"w-full h-full object-contain",alt:""})})]})]})}function Cv(){const{publicErrorBox:i,setBoxState:f}=At();return D.jsxs("div",{className:"fixed inset-0 z-30 flex items-center justify-center",children:[D.jsx("div",{className:"absolute inset-0 bg-black/50 backdrop-blur-sm",onClick:()=>f(!1)}),D.jsxs("div",{className:"relative w-full max-w-[800px] max-h-[80vh] aspect-[800/472] bg-[url('/error.png')] bg-cover bg-no-repeat bg-center rounded-2xl overflow-visible",onClick:s=>s.stopPropagation(),children:[D.jsx("button",{className:`absolute top-36/472 right-30/800\r
                      z-20 w-72/800 flex items-center justify-center hover:cursor-pointer`,onClick:()=>f(!1),children:D.jsx("img",{src:"/tc_X.png",className:"w-full h-full object-contain",alt:""})}),D.jsx("div",{className:"absolute w-339/800 h-200/472 z-10 right-70/800 top-130/472 flex items-center justify-center text-center",children:D.jsx("span",{className:"font-['Arial'] font-bold text-[#1E628D] text-sm sm:text-[30.4px] md:text-[36.48px] lg:text-[38px]",children:i.msg})}),D.jsx("div",{className:"absolute w-241/800 bottom-40/371 right-1/7 hover:cursor-pointer",children:D.jsx("img",{src:"ok.png",alt:"",onClick:()=>f(!1)})})]})]})}function Bv(){const{publicInfoBox:i,setInfoBoxState:f}=At();return D.jsxs("div",{className:"fixed inset-0 z-30 flex items-center justify-center",children:[D.jsx("div",{className:"absolute inset-0 bg-black/50 backdrop-blur-sm",onClick:()=>f(!1)}),D.jsxs("div",{className:"relative w-full max-w-[800px] max-h-[80vh] aspect-[800/412] bg-[url('/info.png')] flex flex-col justify-center items-center gap-y-2 bg-cover bg-no-repeat bg-center rounded-2xl overflow-visible",onClick:s=>s.stopPropagation(),children:[D.jsx("button",{className:`absolute -top-20/412 right-60/800\r
@@ -273,4 +502,4 @@ function Uv(){const{orderInfo:i,paymentForProduct:f,setShowDetailPesanan:s,setSh
         h-[40px] sm:h-[64px] md:h-[76.8px] lg:h-[80px]
         relative flex items-center pl-4 pr-3`,children:[D.jsxs("div",{className:"flex gap-4 items-center flex-1",children:[D.jsx("img",{src:"/app_icon.png",className:"size-[25px] sm:size-[40px] md:size-[48px] lg:size-[50px] hover:cursor-pointer",alt:"logo",onClick:()=>window.open("https://web.neoparty.id")}),D.jsx("img",{src:"/top-title.png",className:`h-[17.5px] sm:h-[28px] md:h-[33.6px] lg:h-[35px]
             w-[75px] sm:w-[120px] md:h-w-[144px] lg:w-[150px] mt-1 hover:cursor-pointer`,alt:"",onClick:()=>window.open("https://web.neoparty.id")})]}),D.jsx("img",{src:"/download.png",className:`h-[25px] sm:h-[40px] md:h-[48px] lg:h-[50px]
-          w-[70px] sm:w-[112px] md:h-w-[134.4px] lg:w-[140px] mt-2 z-10 hover:cursor-pointer`,alt:"",onClick:()=>window.open("https://neopartypro.onelink.me/ZqED/Neo777")}),D.jsx("img",{src:"/tree_siluet.png",className:"absolute right-0 top-0 h-[80px] w-[110px]",alt:""})]}),D.jsxs("div",{className:"relative -mt-1",children:[D.jsx("img",{src:"/tokobar.png",className:"w-full",alt:""}),D.jsx("img",{src:"/kf.png",className:"absolute w-68/800 right-2 top-8/117 hover:cursor-pointer",alt:"",onClick:()=>window.open("https://t.me/AgenNeoParty?text=Halo%20Admin%20Saya%20Ingin%20Top%20up%20Coin")})]}),D.jsx("div",{className:"-mt-[30px] sm:-mt-[48px] md:-mt-[57.6px] lg:-mt-[60px]",children:D.jsx("img",{src:"/header-image.png",alt:""})}),D.jsx(Hv,{}),D.jsx("div",{className:"px-4 mt-2",children:D.jsxs("div",{className:"bg-[#ccffff] rounded-2xl border-[#33ccff] border-2 shadow-lg",children:[D.jsx("div",{className:"flex justify-center mt-4",children:D.jsx("img",{src:"/toko-koin.png",className:"w-[160px]",alt:""})}),D.jsxs("div",{className:"flex flex-col justify-center my-4 px-4 gap-2",children:[i.filter(g=>g.product_type===2).map(g=>D.jsxs("div",{className:"relative flex bg-[url('/sc_libao.png')] bg-cover bg-no-repeat bg-center rounded-2xl overflow-visible w-full aspect-[736/196] justify-evenly",children:[D.jsx(Vp,{title:"Detail hadiah:",content:D.jsxs("div",{children:[D.jsx("p",{children:"Koin Max 600M"}),D.jsx("p",{children:"Max Bet 6M"}),D.jsx("p",{children:"Lebih banyak game"}),D.jsx("p",{children:"Bingkai Eksklusif"}),D.jsx("p",{children:"Buka fitur memberi"})]}),position:"left",children:D.jsx("img",{className:"absolute top-[12%] w-56/736 right-[28%] z-3 hover:cursor-pointer",src:"/sc_wenhao.png",alt:""})}),D.jsxs("button",{className:"absolute w-199/726 z-2 flex flex-col items-center text-center right-2 top-[38%] hover:cursor-pointer",onClick:()=>M0(g),children:[D.jsx("img",{src:"/btn-1.png"}),D.jsxs("span",{className:"select-none absolute top-3/18 font-poetsen bg-gradient-to-b bg-clip-text text-transparent from-[#FFFFFF] to-[#FFF2B4] [text-stroke:1px_#FD7100] [-webkit-text-stroke:1px_#FD7100] sm:[text-stroke:1.5px_#FD7100] sm:[-webkit-text-stroke:1.5px_#FD7100] text-[12px] sm:text-[19.2px] md:text-[23.04x] lg:text-[24px]",children:["IDR ",g.price/1e3," K"]})]})]},g.product_id)),i.filter(g=>g.product_type===1).map(g=>D.jsxs("div",{className:"flex bg-[url('/commodity-bg.png')] bg-cover bg-no-repeat bg-center rounded-2xl overflow-visible w-full aspect-[726/170] items-center pb-[1.76%]",children:[D.jsx("div",{className:"flex-shrink-0 w-172/726 z-2",children:D.jsx("img",{src:"/gold-"+g.product_id+".png",alt:""})}),D.jsxs("div",{className:"z-2 flex flex-col  flex-grow text-center",children:[D.jsx("span",{className:"drop-shadow select-none truncate font-poetsen bg-gradient-to-b bg-clip-text text-transparent from-[#FFFFFF] to-[#ABFFFA] sm:[text-stroke:2px_#4486dc] sm:[-webkit-text-stroke:2px_#4486dc] [text-stroke:1px_#4486dc] [-webkit-text-stroke:1px_#4486dc] [filter:drop-shadow(5px_9px_18%_#13518155)] text-[16px] sm:text-[25.6px] md:text-[30.72px] lg:text-[32px]",children:g.rewards[0].prop_num.toLocaleString()}),g.rewards[1]&&D.jsxs("span",{className:"select-none truncate font-arial font-[800] text-[12px] text-[#064b7f] sm:text-[19.2px] md:text-[23.04px] [text-shadow:0_0_2px_#C6EAFF,0_0_2px_#C6EAFF] [-webkit-text-shadow:0_0_2px_#C6EAFF,0_0_2px_#C6EAFF] lg:text-[24px]",children:["Extra ",g.rewards[1].prop_num.toLocaleString()]})]}),D.jsxs("button",{className:"relative w-199/726 z-2 flex flex-col items-center text-center flex-shrink-0 mr-2 mt-[2%] hover:cursor-pointer",onClick:()=>M0(g),children:[D.jsx("img",{src:"/btn-1.png"}),D.jsxs("span",{className:"drop-shadow select-none absolute top-3/18 font-poetsen bg-gradient-to-b bg-clip-text text-transparent from-[#FFFFFF] to-[#FFF2B4] [text-stroke:.8px_#FD7100] [-webkit-text-stroke:0.8px_#FD7100] sm:[text-stroke:1.5px_#FD7100] sm:[-webkit-text-stroke:1.5px_#FD7100] text-[12px] sm:text-[19.2px] md:text-[23.04x] lg:text-[24px]",children:["IDR ",g.price/1e3," K"]})]})]},g.product_id))]})]})}),D.jsxs("div",{className:"relative flex justify-center mt-8",children:[D.jsx("img",{src:"/footer.png",className:"w-full",alt:""}),D.jsxs("div",{className:"absolute w-full flex justify-center bottom-124/228",children:[D.jsx("img",{src:"/FB.png",className:"w-72/800 mx-1 hover:cursor-pointer",alt:"",onClick:()=>window.open("https://www.facebook.com/neoparty.official","_blank")}),D.jsx("img",{src:"/IG.png",className:"w-72/800 mx-1 hover:cursor-pointer",alt:"",onClick:()=>window.open("https://www.instagram.com/neoparty_official.id/","_blank")}),D.jsx("img",{src:"/TELE.png",className:"w-72/800 mx-1 hover:cursor-pointer",alt:"",onClick:()=>window.open("https://t.me/neoparty_official","_blank")})]})]})]}),m.show&&D.jsx(Cv,{}),s&&D.jsx(qv,{}),f&&D.jsx(Uv,{}),o&&D.jsx(Yv,{}),v.show&&D.jsx(Bv,{})]})}wy.createRoot(document.getElementById("root")).render(D.jsx(Z.StrictMode,{children:D.jsx(Jp,{})}));
+          w-[70px] sm:w-[112px] md:h-w-[134.4px] lg:w-[140px] mt-2 z-10 hover:cursor-pointer`,alt:"",onClick:()=>window.open("https://neopartypro.onelink.me/ZqED/Neo777")}),D.jsx("img",{src:"/tree_siluet.png",className:"absolute right-0 top-0 h-[80px] w-[110px]",alt:""})]}),D.jsxs("div",{className:"relative -mt-1",children:[D.jsx("img",{src:"/tokobar.png",className:"w-full",alt:""}),D.jsx("img",{src:"/kf.png",className:"absolute w-68/800 right-2 top-8/117 hover:cursor-pointer",alt:"",onClick:()=>window.open("https://wa.me/+6289509170352")})]}),D.jsx("div",{className:"-mt-[30px] sm:-mt-[48px] md:-mt-[57.6px] lg:-mt-[60px]",children:D.jsx("img",{src:"/header-image.png",alt:""})}),D.jsx(Hv,{}),D.jsx("div",{className:"px-4 mt-2",children:D.jsxs("div",{className:"bg-[#ccffff] rounded-2xl border-[#33ccff] border-2 shadow-lg",children:[D.jsx("div",{className:"flex justify-center mt-4",children:D.jsx("img",{src:"/toko-koin.png",className:"w-[160px]",alt:""})}),D.jsxs("div",{className:"flex flex-col justify-center my-4 px-4 gap-2",children:[i.filter(g=>g.product_type===2).map(g=>D.jsxs("div",{className:"relative flex bg-[url('/sc_libao.png')] bg-cover bg-no-repeat bg-center rounded-2xl overflow-visible w-full aspect-[736/196] justify-evenly",children:[D.jsx(Vp,{title:"Detail hadiah:",content:D.jsxs("div",{children:[D.jsx("p",{children:"Koin Max 600M"}),D.jsx("p",{children:"Max Bet 6M"}),D.jsx("p",{children:"Lebih banyak game"}),D.jsx("p",{children:"Bingkai Eksklusif"}),D.jsx("p",{children:"Buka fitur memberi"})]}),position:"left",children:D.jsx("img",{className:"absolute top-[12%] w-56/736 right-[28%] z-3 hover:cursor-pointer",src:"/sc_wenhao.png",alt:""})}),D.jsxs("button",{className:"absolute w-199/726 z-2 flex flex-col items-center text-center right-2 top-[38%] hover:cursor-pointer",onClick:()=>M0(g),children:[D.jsx("img",{src:"/btn-1.png"}),D.jsxs("span",{className:"select-none absolute top-3/18 font-poetsen bg-gradient-to-b bg-clip-text text-transparent from-[#FFFFFF] to-[#FFF2B4] [text-stroke:1px_#FD7100] [-webkit-text-stroke:1px_#FD7100] sm:[text-stroke:1.5px_#FD7100] sm:[-webkit-text-stroke:1.5px_#FD7100] text-[12px] sm:text-[19.2px] md:text-[23.04x] lg:text-[24px]",children:["IDR ",g.price/1e3," K"]})]})]},g.product_id)),i.filter(g=>g.product_type===1).map(g=>D.jsxs("div",{className:"flex bg-[url('/commodity-bg.png')] bg-cover bg-no-repeat bg-center rounded-2xl overflow-visible w-full aspect-[726/170] items-center pb-[1.76%]",children:[D.jsx("div",{className:"flex-shrink-0 w-172/726 z-2",children:D.jsx("img",{src:"/gold-"+g.product_id+".png",alt:""})}),D.jsxs("div",{className:"z-2 flex flex-col  flex-grow text-center",children:[D.jsx("span",{className:"drop-shadow select-none truncate font-poetsen bg-gradient-to-b bg-clip-text text-transparent from-[#FFFFFF] to-[#ABFFFA] sm:[text-stroke:2px_#4486dc] sm:[-webkit-text-stroke:2px_#4486dc] [text-stroke:1px_#4486dc] [-webkit-text-stroke:1px_#4486dc] [filter:drop-shadow(5px_9px_18%_#13518155)] text-[16px] sm:text-[25.6px] md:text-[30.72px] lg:text-[32px]",children:g.rewards[0].prop_num.toLocaleString()}),g.rewards[1]&&D.jsxs("span",{className:"select-none truncate font-arial font-[800] text-[12px] text-[#064b7f] sm:text-[19.2px] md:text-[23.04px] [text-shadow:0_0_2px_#C6EAFF,0_0_2px_#C6EAFF] [-webkit-text-shadow:0_0_2px_#C6EAFF,0_0_2px_#C6EAFF] lg:text-[24px]",children:["Extra ",g.rewards[1].prop_num.toLocaleString()]})]}),D.jsxs("button",{className:"relative w-199/726 z-2 flex flex-col items-center text-center flex-shrink-0 mr-2 mt-[2%] hover:cursor-pointer",onClick:()=>M0(g),children:[D.jsx("img",{src:"/btn-1.png"}),D.jsxs("span",{className:"drop-shadow select-none absolute top-3/18 font-poetsen bg-gradient-to-b bg-clip-text text-transparent from-[#FFFFFF] to-[#FFF2B4] [text-stroke:.8px_#FD7100] [-webkit-text-stroke:0.8px_#FD7100] sm:[text-stroke:1.5px_#FD7100] sm:[-webkit-text-stroke:1.5px_#FD7100] text-[12px] sm:text-[19.2px] md:text-[23.04x] lg:text-[24px]",children:["IDR ",g.price/1e3," K"]})]})]},g.product_id))]})]})}),D.jsxs("div",{className:"relative flex justify-center mt-8",children:[D.jsx("img",{src:"/footer.png",className:"w-full",alt:""}),D.jsxs("div",{className:"absolute w-full flex justify-center bottom-124/228",children:[D.jsx("img",{src:"/FB.png",className:"w-72/800 mx-1 hover:cursor-pointer",alt:"",onClick:()=>window.open("https://www.facebook.com/neoparty.official","_blank")}),D.jsx("img",{src:"/IG.png",className:"w-72/800 mx-1 hover:cursor-pointer",alt:"",onClick:()=>window.open("https://www.instagram.com/neoparty_official.id/","_blank")}),D.jsx("img",{src:"/TELE.png",className:"w-72/800 mx-1 hover:cursor-pointer",alt:"",onClick:()=>window.open("https://t.me/neoparty_official","_blank")})]})]})]}),m.show&&D.jsx(Cv,{}),s&&D.jsx(qv,{}),f&&D.jsx(Uv,{}),o&&D.jsx(Yv,{}),v.show&&D.jsx(Bv,{})]})}wy.createRoot(document.getElementById("root")).render(D.jsx(Z.StrictMode,{children:D.jsx(Jp,{})}));
