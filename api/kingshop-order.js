@@ -9,10 +9,6 @@
  *      { success, qrUrl, payload, amount, transaction_id, qris_url, ... }
  *      agar frontend tidak perlu diubah.
  *
- * GET /api/kingshop-order?order_id=xxx
- *   -> status order untuk polling lanjutan dari frontend
- *      (dipakai saat POST return pending:true)
- *
  * Async + polling dipakai supaya tidak tergantung pada satu request sync
  * yang panjang (batas eksekusi Vercel ±60 detik).
  *
@@ -35,7 +31,7 @@ function cors(req, res) {
   const origin = req.headers.origin || '';
   res.setHeader('Access-Control-Allow-Origin',
     ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0]);
-  res.setHeader('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 }
 
@@ -81,49 +77,6 @@ module.exports = async (req, res) => {
   if (typeof body === 'string') {
     try { body = JSON.parse(body); } catch { body = {}; }
   }
-
-  // ---- GET: status order untuk polling lanjutan frontend ----
-  if (req.method === 'GET') {
-    const orderId = String((req.query && req.query.order_id) || '').trim();
-    if (!orderId) {
-      return res.status(400).json({ success: false, error: 'order_id wajib.' });
-    }
-    try {
-      const g = await proxyFetch(PROXY_URL, PROXY_KEY,
-        `/api/order/${encodeURIComponent(orderId)}`);
-      const order = g.data && g.data.order;
-      if (!order) {
-        return res.status(404).json({ success: false, error: 'order tidak ditemukan.' });
-      }
-      if (order.status === 'SUCCESS' && order.result) {
-        const r = order.result;
-        return res.status(200).json({
-          success: true,
-          order_id: orderId,
-          qrUrl: r.qrUrl || null,
-          payload: r.payload || null,
-          amount: r.amount || 20000,
-          transaction_id: r.transaction_id || null,
-          qris_url: r.qris_url || null,
-          redirect_url: r.redirect_url || '',
-        });
-      }
-      if (['FAILED', 'MANUAL_VERIFICATION_REQUIRED', 'BROWSER_ERROR', 'SUPPLIER_ERROR'].includes(order.status)) {
-        return res.status(502).json({
-          success: false, order_id: orderId,
-          error: order.error || 'Gagal membuat order.',
-        });
-      }
-      return res.status(202).json({ success: false, pending: true, order_id: orderId });
-    } catch (e) {
-      return res.status(502).json({ success: false, error: 'Proxy tidak merespon.' });
-    }
-  }
-
-  if (req.method !== 'POST') {
-    return res.status(405).json({ success: false, error: 'Method not allowed' });
-  }
-
   const playerId = String((body && body.playerId) || '').trim();
   if (!/^\d{3,20}$/.test(playerId)) {
     return res.status(400).json({ success: false, error: 'Format ID Player tidak valid.' });
